@@ -1,0 +1,4 @@
+qiskit
+matplotlib
+qiskit_ibm_runtime
+pylatexenc
