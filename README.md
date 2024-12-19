@@ -2,7 +2,7 @@
 Collection of Python scripts to get started with Quantum Computing coding
 
 ## System Setup
- - system: MACOS
+ - system: macOS
  - create virtual environment: `python3 -m venv .venv`
  - activate `.venv` with `source .venv/bin/activate`
  - `pip install --upgrade pip`
