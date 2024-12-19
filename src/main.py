@@ -7,10 +7,9 @@ from utils.save_account import save_account, get_first_available_backend
 
 def main():
     """
-    Note:
-    by default min_required_qubits = 100
-
     Usage:
+    -----
+    
     With virtual environment active, to run this script in terminal CLI
     enter the following:
     python src/main.py
