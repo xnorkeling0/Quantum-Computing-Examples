@@ -2,22 +2,11 @@ import sys
 import os
 from pprint import pformat
 from qiskit_ibm_runtime import QiskitRuntimeService
+from utils.save_account import save_account
 
 # Add the parent directory to the PYTHONPATH 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-def save_account(channel, token):
-    """
-    Ensures saved_accounts is a list of dictionaries
-    """
-    
-    saved_accounts = QiskitRuntimeService.saved_accounts()
-    for _, account in saved_accounts.items():
-        if not account["token"] == token:
-            QiskitRuntimeService.save_account(channel=channel, token=token)
-            print("token has been saved")
-        else:
-            print("token is already saved")
 
 def main():
     """
