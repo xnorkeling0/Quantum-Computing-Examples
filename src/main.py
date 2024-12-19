@@ -3,7 +3,7 @@ import os
 # Add the parent directory to the PYTHONPATH 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from pprint import pformat
-from utils.save_account import save_account, get_available_backend_name
+from utils.save_account import save_account, get_first_available_backend
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
 
     token  = os.getenv('IBM_QUANTUM_TOKEN')
     save_account(token)
-    get_available_backend_name(token)
+    get_first_available_backend(token)
     
 if __name__ == "__main__":
     main()
