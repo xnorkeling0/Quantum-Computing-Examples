@@ -12,7 +12,7 @@ def main():
     """
     With virtual environment active, to run this script in terminal CLI
     enter the following:
-    python tests/test_examples.py
+    python src/main.py
     """
 
     host_name = "ibm_brisbane"

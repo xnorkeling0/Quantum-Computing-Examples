@@ -12,4 +12,4 @@ Collection of Python scripts to get started with Quantum Computing coding
  - in your script the token is accessed via `token = os.getenv('IBM_QUANTUM_TOKEN')`
 
  ## Usage
- [WIP]
+ In CLI run `python src/main.py`
