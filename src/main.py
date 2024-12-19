@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from pprint import pformat
 from qiskit_ibm_runtime import QiskitRuntimeService
-from utils.save_account import save_account
+from utils.save_account import save_account, get_available_backend_name
 
 
 def main():
@@ -15,13 +15,11 @@ def main():
     python src/main.py
     """
 
-    host_name = "ibm_brisbane"
+    min_required_qubits = 100
     channel = "ibm_quantum"
     token  = os.getenv('IBM_QUANTUM_TOKEN')
     save_account(channel, token)
-    service = QiskitRuntimeService(channel=channel, token=token)
-    backend = service.backend(name=host_name)
-    print(f"{backend.num_qubits} qubits in {host_name} quantum computer") # to get number of qubits of selected Quantum computer ibm_brisbane
+    get_available_backend_name(token, min_required_qubits)
     
 if __name__ == "__main__":
     main()
