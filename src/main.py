@@ -10,14 +10,13 @@ def main():
     """
     Note:
     by default min_required_qubits = 100
-    
+
     Usage:
     With virtual environment active, to run this script in terminal CLI
     enter the following:
     python src/main.py
     """
 
-    
     token  = os.getenv('IBM_QUANTUM_TOKEN')
     save_account(token)
     get_available_backend_name(token)
