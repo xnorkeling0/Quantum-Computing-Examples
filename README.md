@@ -1,5 +1,5 @@
-# Quantum-Computing-Examples
-Collection of Python scripts to get started with Quantum Computing coding
+# Quantum Computing Examples
+Live Collection of Python scripts to get started with Quantum Computing coding
 
 ## System Setup
  - system: macOS
