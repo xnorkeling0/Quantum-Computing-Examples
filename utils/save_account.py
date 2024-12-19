@@ -1,6 +1,6 @@
 from qiskit_ibm_runtime import QiskitRuntimeService
 
-def save_account(channel, token):
+def save_account(token, channel: str="ibm_quantum"):
     """
     Ensures saved_accounts is a list of dictionaries
     """
@@ -13,7 +13,7 @@ def save_account(channel, token):
         else:
             print("token is already saved")
 
-def get_available_backend_name(token:str , min_required_qubits: int, channel: str="ibm_quantum") -> str:
+def get_available_backend_name(token:str , min_required_qubits: int=100, channel: str="ibm_quantum") -> str:
     """
     Returns the name of the first available quantum computing machine
     compatible with the user requirements including its IBM quantum account.
