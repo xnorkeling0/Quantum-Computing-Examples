@@ -8,8 +8,6 @@ from qiskit_ibm_runtime import QiskitRuntimeService
 from utils.save_account import save_account
 
 
-
-
 def main():
     """
     With virtual environment active, to run this script in terminal CLI
