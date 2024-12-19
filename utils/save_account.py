@@ -13,13 +13,12 @@ def save_account(token, channel: str="ibm_quantum"):
         else:
             print("token is already saved")
 
-def get_first_available_backend(token:str , min_required_qubits: int=100, channel: str="ibm_quantum") -> ibm_backend.IBMBackend:
+def get_first_available_backend(token:str, channel: str="ibm_quantum") -> ibm_backend.IBMBackend:
     """
     Returns the first available quantum computing machine backend handler
     compatible with the user requirements including its IBM quantum account.
 
     :param token: the user's IBM QUantum account token
-    :param min_required_qubits: the minimum number of qubits needed by the user to run a specific application
     :param channel: the communication channel to use for connecting with IBM Quantum services.
     the default value "ibm_quantum" specifies cloud services.
     :return backend: name of the first available quantum computing machine
