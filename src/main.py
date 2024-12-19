@@ -19,7 +19,8 @@ def main():
 
     token  = os.getenv('IBM_QUANTUM_TOKEN')
     save_account(token)
-    get_first_available_backend(token)
+    backend = get_first_available_backend(token)
+    print(backend)
     
 if __name__ == "__main__":
     main()
