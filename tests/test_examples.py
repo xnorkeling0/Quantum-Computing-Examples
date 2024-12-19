@@ -1,11 +1,13 @@
 import sys 
 import os
+# Add the parent directory to the PYTHONPATH 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from pprint import pformat
 from qiskit_ibm_runtime import QiskitRuntimeService
 from utils.save_account import save_account
 
-# Add the parent directory to the PYTHONPATH 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 
 
 def main():
