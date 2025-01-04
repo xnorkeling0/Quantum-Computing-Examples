@@ -6,6 +6,9 @@ from utils.save_account import save_account, get_first_available_backend
 import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.primitives import StatevectorSampler
+from qiskit.quantum_info import SparsePauliOp
+from qiskit.primitives import StatevectorEstimator
+from qiskit import transpile
 
 
 def main():
@@ -32,6 +35,16 @@ def main():
     result = job.result()
     print(f" > Counts: {result[0].data["meas"].get_counts()}")
 
+    # 2. Define the observable to be measured 
+    operator = SparsePauliOp.from_list([("XXY", 1), ("XYX", 1), ("YXX", 1), ("YYY", -1)])
+
+    # 3. Execute using the Estimator primitive
+    estimator = StatevectorEstimator()
+    job = estimator.run([(qc_example, operator)], precision=1e-3)
+    result = job.result()
+    print(f" > Expectation values: {result[0].data.evs}")
+
+    # Traspile the circuit to real HW for quantum computer execution
     qc_transpiled = transpile(qc_example, basis_gates = ['cz', 'sx', 'rz'], coupling_map =[[0, 1], [1, 2]] , optimization_level=3)
 
 if __name__ == "__main__":
