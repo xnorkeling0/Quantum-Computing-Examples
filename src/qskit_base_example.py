@@ -47,5 +47,6 @@ def main():
     # Traspile the circuit to real HW for quantum computer execution
     qc_transpiled = transpile(qc_example, basis_gates = ['cz', 'sx', 'rz'], coupling_map =[[0, 1], [1, 2]] , optimization_level=3)
 
+    # TODO: run on quantum computer following https://github.com/Qiskit/qiskit-ibm-runtime
 if __name__ == "__main__":
     main()
