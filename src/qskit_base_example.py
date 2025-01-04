@@ -4,12 +4,15 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.save_account import save_account, get_first_available_backend
 import numpy as np
-from qiskit import QuantumCircuit
+from qiskit import QuantumCircuit, transpile
 from qiskit.primitives import StatevectorSampler
 
 
 def main():
-    token  = os.getenv('IBM_QUANTUM_TOKEN')
+    """
+    Example from https://github.com/Qiskit/qiskit
+    """
+    token  = os.getenv('IBM_QUANTUM_TOKEN') # getting the custom env variable that stores my IBM token
     save_account(token)
     backend = get_first_available_backend(token)
 
@@ -29,6 +32,7 @@ def main():
     result = job.result()
     print(f" > Counts: {result[0].data["meas"].get_counts()}")
 
+    qc_transpiled = transpile(qc_example, basis_gates = ['cz', 'sx', 'rz'], coupling_map =[[0, 1], [1, 2]] , optimization_level=3)
 
 if __name__ == "__main__":
     main()
