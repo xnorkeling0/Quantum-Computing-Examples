@@ -37,7 +37,7 @@ def main():
 
     # 2. Define the observable to be measured 
     operator = SparsePauliOp.from_list([("XXY", 1), ("XYX", 1), ("YXX", 1), ("YYY", -1)])
-
+    print(f"The operators strings:\n{operator}")
     # 3. Execute using the Estimator primitive
     estimator = StatevectorEstimator()
     job = estimator.run([(qc_example, operator)], precision=1e-3)
@@ -47,8 +47,10 @@ def main():
     # Traspile the circuit to real HW for quantum computer execution
     # qc_transpiled = transpile(qc_example, basis_gates = ['cz', 'sx', 'rz'], coupling_map =[[0, 1], [1, 2]] , optimization_level=3)
     pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=1)
-    qc_transpiler = pass_manager.run(qc_example)
+    qc_transpiled = pass_manager.run(qc_example)
+    operator_transpiled = operator.apply_layout(qc_transpiled.layout)
 
+    # Transpile operators
     # TODO: run on quantum computer following https://github.com/Qiskit/qiskit-ibm-runtime
 if __name__ == "__main__":
     main()
