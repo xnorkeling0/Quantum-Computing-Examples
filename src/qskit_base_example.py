@@ -8,7 +8,7 @@ from qiskit import QuantumCircuit, transpile
 from qiskit.primitives import StatevectorSampler
 from qiskit.quantum_info import SparsePauliOp
 from qiskit.primitives import StatevectorEstimator
-from qiskit import transpile
+from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 
 
 def main():
@@ -45,7 +45,9 @@ def main():
     print(f" > Expectation values: {result[0].data.evs}")
 
     # Traspile the circuit to real HW for quantum computer execution
-    qc_transpiled = transpile(qc_example, basis_gates = ['cz', 'sx', 'rz'], coupling_map =[[0, 1], [1, 2]] , optimization_level=3)
+    # qc_transpiled = transpile(qc_example, basis_gates = ['cz', 'sx', 'rz'], coupling_map =[[0, 1], [1, 2]] , optimization_level=3)
+    pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=1)
+    qc_transpiler = pass_manager.run(qc_example)
 
     # TODO: run on quantum computer following https://github.com/Qiskit/qiskit-ibm-runtime
 if __name__ == "__main__":
