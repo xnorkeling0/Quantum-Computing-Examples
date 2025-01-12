@@ -9,6 +9,7 @@ from qiskit.primitives import StatevectorSampler, StatevectorEstimator
 from qiskit.quantum_info import SparsePauliOp
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from qiskit_ibm_runtime import QiskitRuntimeService, EstimatorOptions, EstimatorV2 as Estimator
+from qiskit_ibm_runtime.options.resilience_options import ResilienceOptionsV2
 
 
 def main():
@@ -57,8 +58,10 @@ def main():
     # initialize an estimator that takes in the backend with some options
     #
     options = EstimatorOptions()
-    options.resilience_level = 1 # we use measurements without mitigation (e.g., level 2 is to get zero noise extrapolation)
-    options.optimization_level = 0 # because transpilation is already done on the local machine
+    resilience_options = ResilienceOptionsV2()
+    resilience_options.measure_mitigation = False
+
+    options.resilience = resilience_options # we use measurements without mitigation (e.g., level 2 is to get zero noise extrapolation)
     options.dynamical_decoupling.enable = True # to get rid of interferences like cross-talks
     options.dynamical_decoupling.sequence_type = "XY4" # error suppression technique
 
@@ -70,6 +73,8 @@ def main():
     of X and Y gates applied in a specific order to help mitigate errors. The XY4 sequence is known for its
     simplicity and effectiveness in reducing certain types of noise.
     """
+
+
 
 
 
