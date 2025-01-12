@@ -55,6 +55,26 @@ def main():
 
     # 3. Execute on the Backend
     # initialize an estimator that takes in the backend with some options
+    #
+    options = EstimatorOptions()
+    options.resilience_level = 1 # we use measurements without mitigation (e.g., level 2 is to get zero noise extrapolation)
+    options.optimization_level = 0 # because transpilation is already done on the local machine
+    options.dynamical_decoupling.enable = True # to get rid of interferences like cross-talks
+    options.dynamical_decoupling.sequence_type = "XY4" # error suppression technique
+
+    """
+    Dynamical Decoupling is a method used to reduce errors in quantum computations by applying a sequence 
+    of pulses to qubits that are idle (not currently being used in operations). The goal is to cancel out
+    the effects of unwanted interactions and noise that can cause errors.
+    The "XY4" sequence is one type of pulse sequence used in dynamical decoupling. It consists of a series
+    of X and Y gates applied in a specific order to help mitigate errors. The XY4 sequence is known for its
+    simplicity and effectiveness in reducing certain types of noise.
+    """
+
+
+
+
+
 
 
     # TODO: run on quantum computer following https://github.com/Qiskit/qiskit-ibm-runtime
