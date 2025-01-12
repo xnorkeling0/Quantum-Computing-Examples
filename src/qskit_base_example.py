@@ -14,6 +14,8 @@ from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 def main():
     """
     Example from https://github.com/Qiskit/qiskit
+    Here below steps for simulation only (not on Quantum Computer) are specified with (Simulation)
+    while the ones with no specifications are meant for execution on Quantum Computer.
     """
     token  = os.getenv('IBM_QUANTUM_TOKEN') # getting the custom env variable that stores my IBM token
     save_account(token)
@@ -26,10 +28,10 @@ def main():
     qc_example.cx(0,1)       # 0th-qubit-Controlled-NOT gate on 1st qubit
     qc_example.cx(0,2)       # 0th-qubit-Controlled-NOT gate on 2nd qubit
 
-    # 2. Add the classical output in the form of measurement of all qubits
+    # 2. (Simulation) Add the classical output in the form of measurement of all qubits
     qc_measured = qc_example.measure_all(inplace=False)
 
-    # 3. Execute using the Sampler primitive
+    # 3. (Simulation) Execute using the Sampler primitive
     sampler = StatevectorSampler()
     job = sampler.run([qc_measured], shots=1000)
     result = job.result()
@@ -38,7 +40,8 @@ def main():
     # 2. Define the observable to be measured 
     operator = SparsePauliOp.from_list([("XXY", 1), ("XYX", 1), ("YXX", 1), ("YYY", -1)])
     print(f"The operators strings:\n{operator}")
-    # 3. Execute using the Estimator primitive
+    
+    # 3. (Simulation) Execute using the Estimator primitive
     estimator = StatevectorEstimator()
     job = estimator.run([(qc_example, operator)], precision=1e-3)
     result = job.result()
@@ -50,7 +53,7 @@ def main():
     qc_transpiled = pass_manager.run(qc_example)
     operator_transpiled = operator.apply_layout(qc_transpiled.layout)
 
-    # 3. Execute on the Backedn
+    # 3. Execute on the Backend
 
     # TODO: run on quantum computer following https://github.com/Qiskit/qiskit-ibm-runtime
 if __name__ == "__main__":
