@@ -19,7 +19,7 @@ def main():
     save_account(token)
     backend = get_first_available_backend(token)
 
-    # 1. A quantum circuit for preparing the quantum state |000> + i |111>
+    # 1. Map the problem: A quantum circuit for preparing the quantum state |000> + i |111>
     qc_example = QuantumCircuit(3)
     qc_example.h(0)          # generate superpostion
     qc_example.p(np.pi/2,0)  # add quantum phase
@@ -44,13 +44,14 @@ def main():
     result = job.result()
     print(f" > Expectation values: {result[0].data.evs}")
 
-    # Traspile the circuit to real HW for quantum computer execution
+    # 2. Optimize the problem
     # qc_transpiled = transpile(qc_example, basis_gates = ['cz', 'sx', 'rz'], coupling_map =[[0, 1], [1, 2]] , optimization_level=3)
     pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=1)
     qc_transpiled = pass_manager.run(qc_example)
     operator_transpiled = operator.apply_layout(qc_transpiled.layout)
 
-    # Transpile operators
+    # 3. Execute on the Backedn
+
     # TODO: run on quantum computer following https://github.com/Qiskit/qiskit-ibm-runtime
 if __name__ == "__main__":
     main()
