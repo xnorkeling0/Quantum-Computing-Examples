@@ -5,9 +5,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.save_account import save_account, get_first_available_backend
 import numpy as np
 from qiskit import QuantumCircuit, transpile
-from qiskit.primitives import StatevectorSampler
+from qiskit.primitives import StatevectorSampler, StatevectorEstimator
 from qiskit.quantum_info import SparsePauliOp
-from qiskit.primitives import StatevectorEstimator
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 
 
@@ -54,6 +53,7 @@ def main():
     operator_transpiled = operator.apply_layout(qc_transpiled.layout)
 
     # 3. Execute on the Backend
+    # initialize an estimator that takes in the backend with some options
 
     # TODO: run on quantum computer following https://github.com/Qiskit/qiskit-ibm-runtime
 if __name__ == "__main__":
