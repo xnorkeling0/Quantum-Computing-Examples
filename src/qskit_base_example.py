@@ -74,6 +74,13 @@ def main():
     simplicity and effectiveness in reducing certain types of noise.
     """
 
+    estimator = Estimator(backend, options=options)
+    job  = estimator.run([(qc_transpiled, operator)])
+    job_id = job.job_id()
+    job_status = job.status()
+    print(job_id)
+    print(job_status)
+
 
 
 
