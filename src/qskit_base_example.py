@@ -19,67 +19,44 @@ def main():
     while the ones with no specifications are meant for execution on Quantum Computer.
     """
     token  = os.getenv('IBM_QUANTUM_TOKEN') # getting the custom env variable that stores my IBM token
-    save_account(token)
-    backend = get_first_available_backend(token)
+    service = QiskitRuntimeService(channel="ibm_quantum", token=token)
+    backend = service.least_busy(operational=True, simulator=False)
 
     # 1. Map the problem: A quantum circuit for preparing the quantum state |000> + i |111>
-    qc_example = QuantumCircuit(3)
+    num_qubits = 3
+    qc_example = QuantumCircuit(num_qubits)
     qc_example.h(0)          # generate superpostion
     qc_example.p(np.pi/2,0)  # add quantum phase
     qc_example.cx(0,1)       # 0th-qubit-Controlled-NOT gate on 1st qubit
     qc_example.cx(0,2)       # 0th-qubit-Controlled-NOT gate on 2nd qubit
 
-    # 2. (Simulation) Add the classical output in the form of measurement of all qubits
-    qc_measured = qc_example.measure_all(inplace=False)
-
-    # 3. (Simulation) Execute using the Sampler primitive
-    sampler = StatevectorSampler()
-    job = sampler.run([qc_measured], shots=1000)
-    result = job.result()
-    print(f" > Counts: {result[0].data["meas"].get_counts()}")
 
     # 2. Define the observable to be measured 
     operator = SparsePauliOp.from_list([("XXY", 1), ("XYX", 1), ("YXX", 1), ("YYY", -1)])
     print(f"The operators strings:\n{operator}")
     
-    # 3. (Simulation) Execute using the Estimator primitive
-    estimator = StatevectorEstimator()
-    job = estimator.run([(qc_example, operator)], precision=1e-3)
-    result = job.result()
-    print(f" > Expectation values: {result[0].data.evs}")
+    # coeffs = [1.0, 1.0, 1.0, -1.0] # Example coefficients
+    # pauli_strings = ['X' * num_qubits, 'Y' * num_qubits, 'Z' * num_qubits, 'I' * num_qubits] # Example Pauli strings
+    # operator = SparsePauliOp(pauli_strings, coeffs)
+    
 
     # 2. Optimize the problem
     # qc_transpiled = transpile(qc_example, basis_gates = ['cz', 'sx', 'rz'], coupling_map =[[0, 1], [1, 2]] , optimization_level=3)
     pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=1)
     qc_transpiled = pass_manager.run(qc_example)
-    operator_transpiled = operator.apply_layout(qc_transpiled.layout)
+    operator_transpiled = operator.apply_layout(layout=qc_transpiled.layout)
 
     # 3. Execute on the Backend
     # initialize an estimator that takes in the backend with some options
     #
-    options = EstimatorOptions()
-    resilience_options = ResilienceOptionsV2()
-    resilience_options.measure_mitigation = False
-
-    options.resilience = resilience_options # we use measurements without mitigation (e.g., level 2 is to get zero noise extrapolation)
-    options.dynamical_decoupling.enable = True # to get rid of interferences like cross-talks
-    options.dynamical_decoupling.sequence_type = "XY4" # error suppression technique
-
-    """
-    Dynamical Decoupling is a method used to reduce errors in quantum computations by applying a sequence 
-    of pulses to qubits that are idle (not currently being used in operations). The goal is to cancel out
-    the effects of unwanted interactions and noise that can cause errors.
-    The "XY4" sequence is one type of pulse sequence used in dynamical decoupling. It consists of a series
-    of X and Y gates applied in a specific order to help mitigate errors. The XY4 sequence is known for its
-    simplicity and effectiveness in reducing certain types of noise.
-    """
-
-    estimator = Estimator(backend, options=options)
-    job  = estimator.run([(qc_transpiled, operator)])
+    estimator = Estimator(mode=backend)
+    job  = estimator.run([(qc_transpiled, operator_transpiled)])
     job_id = job.job_id()
     job_status = job.status()
     print(job_id)
     print(job_status)
+    pub_result = job.result()[0]
+    print(f"Expectation values: {pub_result.data.evs}")
 
 
 
