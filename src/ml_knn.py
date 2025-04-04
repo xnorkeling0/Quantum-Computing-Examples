@@ -24,7 +24,6 @@ Step #2: Normalize Options (no_<option_number>)
 
 no_1 = option_1/(option_1^2 + option_2^2)
 no_2 = option_2/(option_1^2 + option_2^2)
-
 """
 
 
