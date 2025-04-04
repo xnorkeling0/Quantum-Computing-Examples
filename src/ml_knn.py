@@ -24,6 +24,12 @@ Step #2: Normalize Options (no_<option_number>)
 
 no_1 = option_1/(option_1^2 + option_2^2)
 no_2 = option_2/(option_1^2 + option_2^2)
+
+Step #3: Compute Squared Euclidean Distances
+Step #4: Compute Weights
+Step #5: Normalize Weights
+Step #6: Print Results
+
 """
 
 
