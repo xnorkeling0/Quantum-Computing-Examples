@@ -33,11 +33,17 @@ Step #6: Print Results
 Simplified Study Case (as starter):
 -----------------------------------
         option_1 option_2  choice
-case_2  4.5      3         1
-case_1  1        1.5       2
-query   3.5      2         ?
+case_1  4.5      3         1
+case_2  1        1.5       2
+test    3.5      2         ?
 """
 
+# Simplified Study Case:
 import math
+
+dataset = [[4.5, 3, 1],[1, 1.5, 2]]
+test = [3.5, 2]
+
+base = math.sqrt(dataset[0][0]**2 + dataset[0][1]**2)
 
 
