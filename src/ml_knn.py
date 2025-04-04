@@ -30,6 +30,12 @@ Step #4: Compute Weights
 Step #5: Normalize Weights
 Step #6: Print Results
 
+Simplified Study Case (as starter):
+-----------------------------------
+        option_1 option_2  choice
+case_2  4.5      3         1
+case_1  1        1.5       2
+query   3.5      2         ?
 """
 
 
