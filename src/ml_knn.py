@@ -38,5 +38,6 @@ case_1  1        1.5       2
 query   3.5      2         ?
 """
 
+import math
 
 
