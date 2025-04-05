@@ -41,19 +41,10 @@ test    3.5      2         ?
 # Simplified Study Case:
 from math import sqrt
 
+
 dataset = [[4.5, 3, 1],[1, 1.5, 2]]
 test = [3.5, 2]
-
-#base = sqrt(dataset[0][0]**2 + dataset[0][1]**2)
-#dataset[0][0] = dataset[0][0]/base
-#dataset[0][1] = dataset[0][1]/base
-#vector_length = print(sqrt((dataset[0][0])**2 + (dataset[0][1])**2))
-#
-#base = sqrt(dataset[1][0]**2 + dataset[1][1]**2)
-#dataset[1][0] = dataset[1][0]/base
-#dataset[1][1] = dataset[1][1]/base
-#vector_length = print(sqrt((dataset[1][0])**2 + (dataset[1][1])**2))
-
+# Training set normalization:
 for i in range(len(dataset)):
     base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
     dataset[i][0] = dataset[i][0]/base
@@ -61,6 +52,13 @@ for i in range(len(dataset)):
     vector_length = sqrt((dataset[i][0])**2 + (dataset[i][1])**2)
     print(f"Vector {i + 1} length after normalization: {vector_length}")
 
+# Test set normalization
+base = sqrt(test[0]**2 + test[1]**2)
+test[0] = test[0]/base
+test[1] = test[1]/base
+vector_length = sqrt((test[0])**2 + (test[1])**2)
+print(f"Normalized test points:\n{test[0]}\n{test[1]}")
+print(f"Vector {i + 1} length after normalization: {vector_length}")
 
 
 
