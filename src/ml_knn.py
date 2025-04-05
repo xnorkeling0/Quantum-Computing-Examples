@@ -88,16 +88,8 @@ class KnnModel:
             weight.append(1 - 0.25*squared_euclidean_distance)
             print(f"from point {i}: {squared_euclidean_distance} with weight of {weight[i]}")
         return weight
-
-    def run(self):
-        dataset = self.get_dataset()
-        dataset = self.normalize_dataset(dataset)
-        test = self.normalize_test_set(self.test)
-        weight = self.compute_weights(dataset, test)
-
-
-        
-        # Weighs normalization:
+    
+    def weights_normalization(self, weight):
         base = 0
         for i in range(len(weight)):
             base = base + weight[i]
@@ -107,10 +99,15 @@ class KnnModel:
             sum = sum + weight[i]
             print(f"Normalized weight for point{i}: {weight[i]}")
         print(f"Sum of normalized weights is {sum}")
+        return weight
 
+    def run(self):
+        dataset = self.get_dataset()
+        dataset = self.normalize_dataset(dataset)
+        test = self.normalize_test_set(self.test)
+        weight = self.compute_weights(dataset, test)
+        weight = self.weights_normalization(weight)
         print(self.decision(weight))
-
-    
 
 if __name__ == "__main__":
     # The dataset from src/dataset.csv:
