@@ -68,6 +68,18 @@ for i in range(len(test)):
     squared_euclidean_distance = (test[0]-dataset[i][0])**2 + (test[1]-dataset[i][1])**2
     weight.append(1 - 0.25*squared_euclidean_distance)
     print(f"from point {i}: {squared_euclidean_distance} with weight of {weight[i]}")
+
+# Weighs normalization:
+base = 0
+for i in range(len(weight)):
+    base = base + weight[i]
+sum = 0
+for i in range(len(weight)):
+    weight[i] = weight[i] / base
+    sum = sum + weight[i]
+    print(f"Normalized weight for point{i}: {weight[i]}")
+print(f"Sum of normalized weights is {sum}")
+
     
 
 
