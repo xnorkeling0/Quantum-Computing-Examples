@@ -44,6 +44,7 @@ from math import sqrt
 
 dataset = [[4.5, 3, 1],[1, 1.5, 2]]
 test = [3.5, 2]
+
 # Training set normalization:
 for i in range(len(dataset)):
     base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
@@ -60,11 +61,14 @@ vector_length = sqrt((test[0])**2 + (test[1])**2)
 print(f"Normalized test points:\n{test[0]}\n{test[1]}")
 print(f"Vector {i + 1} length after normalization: {vector_length}")
 
-# Squared Euclidean Distances
+# Squared Euclidean Distances and weights
+weight = []
 print(f"Distances:")
 for i in range(len(test)):
-    distance = (test[0]-dataset[i][0])**2 + (test[1]-dataset[i][1])**2
-    print(f"from point {i}: {distance}")
+    squared_euclidean_distance = (test[0]-dataset[i][0])**2 + (test[1]-dataset[i][1])**2
+    weight.append(1 - 0.25*squared_euclidean_distance)
+    print(f"from point {i}: {squared_euclidean_distance} with weight of {weight[i]}")
+    
 
 
 
