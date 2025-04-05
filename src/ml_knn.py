@@ -54,17 +54,21 @@ class KnnModel:
         dataset = df.values.tolist()
         print(f"The Dataset:\n{dataset}")
         return dataset
-
-    def run(self):
-        dataset = self.get_dataset()
-
-        # Training set normalization:
+    
+    def normalize_dataset(self, dataset: list):
         for i in range(len(dataset)):
             base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
             dataset[i][0] = dataset[i][0]/base
             dataset[i][1] = dataset[i][1]/base
             vector_length = sqrt((dataset[i][0])**2 + (dataset[i][1])**2)
             print(f"Vector {i + 1} length after normalization: {vector_length}")
+        return dataset
+
+
+    def run(self):
+        dataset = self.get_dataset()
+        dataset = self.normalize_dataset(dataset)
+
 
         # Test set normalization
         base = sqrt(self.test[0]**2 + self.test[1]**2)
@@ -72,7 +76,7 @@ class KnnModel:
         self.test[1] = self.test[1]/base
         vector_length = sqrt((self.test[0])**2 + (self.test[1])**2)
         print(f"Normalized test points:\n{self.test[0]}\n{self.test[1]}")
-        print(f"Vector {i + 1} length after normalization: {vector_length}")
+
 
         # Squared Euclidean Distances and weights
         weight = []
