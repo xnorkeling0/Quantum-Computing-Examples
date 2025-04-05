@@ -42,61 +42,72 @@ test    3.5      2         ?
 import pandas as pd
 from math import sqrt
 
-# The dataset from src/dataset.csv:
-# (It needs an empty row above the first data row)
-# dataset = [
-#     [4.5, 3, 1],
-#     [1, 1.5, 2]
-# ]
-test = [3.5, 2]
 
-df = pd.read_csv('src/dataset.csv')
-dataset = df.values.tolist()
+class KnnModel:
 
-print("The Dataset:")
-print(dataset)
-# Training set normalization:
-for i in range(len(dataset)):
-    base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
-    dataset[i][0] = dataset[i][0]/base
-    dataset[i][1] = dataset[i][1]/base
-    vector_length = sqrt((dataset[i][0])**2 + (dataset[i][1])**2)
-    print(f"Vector {i + 1} length after normalization: {vector_length}")
+    def __init__(self, db_path, test):
+        self.db_path: str = db_path
+        self.test: list = test
+    
+    def run(self):
+        df = pd.read_csv(self.db_path)
+        dataset = df.values.tolist()
 
-# Test set normalization
-base = sqrt(test[0]**2 + test[1]**2)
-test[0] = test[0]/base
-test[1] = test[1]/base
-vector_length = sqrt((test[0])**2 + (test[1])**2)
-print(f"Normalized test points:\n{test[0]}\n{test[1]}")
-print(f"Vector {i + 1} length after normalization: {vector_length}")
+        print("The Dataset:")
+        print(dataset)
+        # Training set normalization:
+        for i in range(len(dataset)):
+            base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
+            dataset[i][0] = dataset[i][0]/base
+            dataset[i][1] = dataset[i][1]/base
+            vector_length = sqrt((dataset[i][0])**2 + (dataset[i][1])**2)
+            print(f"Vector {i + 1} length after normalization: {vector_length}")
 
-# Squared Euclidean Distances and weights
-weight = []
-print(f"Distances:")
-for i in range(len(test)):
-    squared_euclidean_distance = (test[0]-dataset[i][0])**2 + (test[1]-dataset[i][1])**2
-    weight.append(1 - 0.25*squared_euclidean_distance)
-    print(f"from point {i}: {squared_euclidean_distance} with weight of {weight[i]}")
+        # Test set normalization
+        base = sqrt(self.test[0]**2 + self.test[1]**2)
+        self.test[0] = self.test[0]/base
+        self.test[1] = self.test[1]/base
+        vector_length = sqrt((self.test[0])**2 + (self.test[1])**2)
+        print(f"Normalized test points:\n{self.test[0]}\n{self.test[1]}")
+        print(f"Vector {i + 1} length after normalization: {vector_length}")
 
-# Weighs normalization:
-base = 0
-for i in range(len(weight)):
-    base = base + weight[i]
-sum = 0
-for i in range(len(weight)):
-    weight[i] = weight[i] / base
-    sum = sum + weight[i]
-    print(f"Normalized weight for point{i}: {weight[i]}")
-print(f"Sum of normalized weights is {sum}")
+        # Squared Euclidean Distances and weights
+        weight = []
+        print(f"Distances:")
+        for i in range(len(self.test)):
+            squared_euclidean_distance = (self.test[0]-dataset[i][0])**2 + (self.test[1]-dataset[i][1])**2
+            weight.append(1 - 0.25*squared_euclidean_distance)
+            print(f"from point {i}: {squared_euclidean_distance} with weight of {weight[i]}")
 
-# ML model taking a decision
-largest = max(weight)
-index_of_largest = weight.index(largest)
-print(f"Option {index_of_largest+1} is better")
+        # Weighs normalization:
+        base = 0
+        for i in range(len(weight)):
+            base = base + weight[i]
+        sum = 0
+        for i in range(len(weight)):
+            weight[i] = weight[i] / base
+            sum = sum + weight[i]
+            print(f"Normalized weight for point{i}: {weight[i]}")
+        print(f"Sum of normalized weights is {sum}")
+
+        # ML model taking a decision
+        largest = max(weight)
+        index_of_largest = weight.index(largest)
+        print(f"Option {index_of_largest+1} is better")
     
 
 if __name__ == "__main__":
-    pass
+    # The dataset from src/dataset.csv:
+    # (It needs an empty row above the first data row)
+    # dataset = [
+    #     [4.5, 3, 1],
+    #     [1, 1.5, 2]
+    # ]
+    db_path = "src/dataset.csv"
+    test = [3.5, 2]
+
+    ml_model_inst = KnnModel(db_path, test)
+    ml_model_inst.run()
+
 
 
