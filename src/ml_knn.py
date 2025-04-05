@@ -80,6 +80,11 @@ for i in range(len(weight)):
     print(f"Normalized weight for point{i}: {weight[i]}")
 print(f"Sum of normalized weights is {sum}")
 
+# ML model taking a decision
+if weight[0] >= weight[1]:
+    print(f"Option 1 is better")
+else:
+    print(f"Option 2 is better")
     
 
 
