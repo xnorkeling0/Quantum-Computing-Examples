@@ -51,7 +51,6 @@ from math import sqrt
 test = [3.5, 2]
 
 df = pd.read_csv('src/dataset.csv')
-#df = df.dropna(axis=1, how='all')
 dataset = df.values.tolist()
 
 print("The Dataset:")
