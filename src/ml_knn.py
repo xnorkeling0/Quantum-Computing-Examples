@@ -63,26 +63,28 @@ class KnnModel:
             vector_length = sqrt((dataset[i][0])**2 + (dataset[i][1])**2)
             print(f"Vector {i + 1} length after normalization: {vector_length}")
         return dataset
+    
+    def normalize_test_set(self, test_set: list):
+        base = sqrt(test_set[0]**2 + test_set[1]**2)
+        test_set[0] = test_set[0]/base
+        test_set[1] = test_set[1]/base
+        vector_length = sqrt((test_set[0])**2 + (test_set[1])**2)
+        print(f"Normalized test points:\n{test_set[0]}\n{test_set[1]}")
+        print(f"test set euclidian vector length: {vector_length}")
+        return test_set
 
 
     def run(self):
         dataset = self.get_dataset()
         dataset = self.normalize_dataset(dataset)
-
-
-        # Test set normalization
-        base = sqrt(self.test[0]**2 + self.test[1]**2)
-        self.test[0] = self.test[0]/base
-        self.test[1] = self.test[1]/base
-        vector_length = sqrt((self.test[0])**2 + (self.test[1])**2)
-        print(f"Normalized test points:\n{self.test[0]}\n{self.test[1]}")
+        test = self.normalize_test_set(self.test)
 
 
         # Squared Euclidean Distances and weights
         weight = []
         print(f"Distances:")
-        for i in range(len(self.test)):
-            squared_euclidean_distance = (self.test[0]-dataset[i][0])**2 + (self.test[1]-dataset[i][1])**2
+        for i in range(len(test)):
+            squared_euclidean_distance = (test[0]-dataset[i][0])**2 + (test[1]-dataset[i][1])**2
             weight.append(1 - 0.25*squared_euclidean_distance)
             print(f"from point {i}: {squared_euclidean_distance} with weight of {weight[i]}")
 
