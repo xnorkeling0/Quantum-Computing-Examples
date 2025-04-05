@@ -49,12 +49,15 @@ class KnnModel:
         self.db_path: str = db_path
         self.test: list = test
     
-    def run(self):
+    def get_dataset(self):
         df = pd.read_csv(self.db_path)
         dataset = df.values.tolist()
+        print(f"The Dataset:\n{dataset}")
+        return dataset
 
-        print("The Dataset:")
-        print(dataset)
+    def run(self):
+        dataset = self.get_dataset()
+
         # Training set normalization:
         for i in range(len(dataset)):
             base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
