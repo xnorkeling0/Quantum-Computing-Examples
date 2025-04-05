@@ -1,6 +1,7 @@
-qiskit
-matplotlib
-qiskit_ibm_runtime
-pylatexenc
-qiskit_aer
 numpy
+matplotlib
+qiskit
+qiskit_ibm_runtime
+qiskit_aer
+pandas
+pylatexenc
