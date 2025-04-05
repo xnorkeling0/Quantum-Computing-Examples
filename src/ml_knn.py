@@ -39,6 +39,7 @@ test    3.5      2         ?
 """
 
 # Simplified Study Case:
+import pandas as pd
 from math import sqrt
 
 
