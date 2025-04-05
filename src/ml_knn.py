@@ -44,17 +44,22 @@ from math import sqrt
 dataset = [[4.5, 3, 1],[1, 1.5, 2]]
 test = [3.5, 2]
 
-# I iteration: dataset[0][0] + dataset[0][1] > 1
-base = sqrt(dataset[0][0]**2 + dataset[0][1]**2)
-dataset[0][0] = dataset[0][0]/base
-dataset[0][1] = dataset[0][1]/base
-vector_lenght = print(sqrt((dataset[0][0])**2 + (dataset[0][1])**2))
+#base = sqrt(dataset[0][0]**2 + dataset[0][1]**2)
+#dataset[0][0] = dataset[0][0]/base
+#dataset[0][1] = dataset[0][1]/base
+#vector_length = print(sqrt((dataset[0][0])**2 + (dataset[0][1])**2))
+#
+#base = sqrt(dataset[1][0]**2 + dataset[1][1]**2)
+#dataset[1][0] = dataset[1][0]/base
+#dataset[1][1] = dataset[1][1]/base
+#vector_length = print(sqrt((dataset[1][0])**2 + (dataset[1][1])**2))
 
-
-base = sqrt(dataset[1][0]**2 + dataset[1][1]**2)
-dataset[1][0] = dataset[1][0]/base
-dataset[1][1] = dataset[1][1]/base
-vector_lenght = print(sqrt((dataset[1][0])**2 + (dataset[1][1])**2))
+for i in range(len(dataset)):
+    base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
+    dataset[i][0] = dataset[i][0]/base
+    dataset[i][1] = dataset[i][1]/base
+    vector_length = sqrt((dataset[i][0])**2 + (dataset[i][1])**2)
+    print(f"Vector {i + 1} length after normalization: {vector_length}")
 
 
 
