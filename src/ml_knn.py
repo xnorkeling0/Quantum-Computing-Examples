@@ -79,21 +79,24 @@ class KnnModel:
         index_of_largest = weight.index(largest)
         decision = f"Option {index_of_largest+1} is better"
         return decision
-
-    def run(self):
-        dataset = self.get_dataset()
-        dataset = self.normalize_dataset(dataset)
-        test = self.normalize_test_set(self.test)
-
-
-        # Squared Euclidean Distances and weights
+    
+    def compute_weights(self, dataset, test):
         weight = []
         print(f"Distances:")
         for i in range(len(test)):
             squared_euclidean_distance = (test[0]-dataset[i][0])**2 + (test[1]-dataset[i][1])**2
             weight.append(1 - 0.25*squared_euclidean_distance)
             print(f"from point {i}: {squared_euclidean_distance} with weight of {weight[i]}")
+        return weight
 
+    def run(self):
+        dataset = self.get_dataset()
+        dataset = self.normalize_dataset(dataset)
+        test = self.normalize_test_set(self.test)
+        weight = self.compute_weights(dataset, test)
+
+
+        
         # Weighs normalization:
         base = 0
         for i in range(len(weight)):
