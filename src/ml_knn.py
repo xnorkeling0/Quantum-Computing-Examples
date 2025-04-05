@@ -42,7 +42,10 @@ test    3.5      2         ?
 from math import sqrt
 
 
-dataset = [[4.5, 3, 1],[1, 1.5, 2]]
+dataset = [
+    [4.5, 3, 1],
+    [1, 1.5, 2]
+]
 test = [3.5, 2]
 
 # Training set normalization:
@@ -81,13 +84,10 @@ for i in range(len(weight)):
 print(f"Sum of normalized weights is {sum}")
 
 # ML model taking a decision
-if weight[0] >= weight[1]:
-    print(f"Option 1 is better")
-else:
-    print(f"Option 2 is better")
+largest = max(weight)
+index_of_largest = weight.index(largest)
+print(f"Option {index_of_largest+1} is better")
     
-
-
 
 if __name__ == "__main__":
     pass
