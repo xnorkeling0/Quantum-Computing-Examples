@@ -42,13 +42,20 @@ test    3.5      2         ?
 import pandas as pd
 from math import sqrt
 
-
-dataset = [
-    [4.5, 3, 1],
-    [1, 1.5, 2]
-]
+# The dataset from src/dataset.csv:
+# (It needs an empty row above the first data row)
+# dataset = [
+#     [4.5, 3, 1],
+#     [1, 1.5, 2]
+# ]
 test = [3.5, 2]
 
+df = pd.read_csv('src/dataset.csv')
+#df = df.dropna(axis=1, how='all')
+dataset = df.values.tolist()
+
+print("The Dataset:")
+print(dataset)
 # Training set normalization:
 for i in range(len(dataset)):
     base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
