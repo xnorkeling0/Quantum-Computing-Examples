@@ -73,6 +73,12 @@ class KnnModel:
         print(f"test set euclidian vector length: {vector_length}")
         return test_set
 
+    def decision(self, weight):
+        # ML model taking a decision
+        largest = max(weight)
+        index_of_largest = weight.index(largest)
+        decision = f"Option {index_of_largest+1} is better"
+        return decision
 
     def run(self):
         dataset = self.get_dataset()
@@ -99,10 +105,8 @@ class KnnModel:
             print(f"Normalized weight for point{i}: {weight[i]}")
         print(f"Sum of normalized weights is {sum}")
 
-        # ML model taking a decision
-        largest = max(weight)
-        index_of_largest = weight.index(largest)
-        print(f"Option {index_of_largest+1} is better")
+        print(self.decision(weight))
+
     
 
 if __name__ == "__main__":
