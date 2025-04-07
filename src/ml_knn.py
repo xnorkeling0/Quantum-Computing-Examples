@@ -90,6 +90,19 @@ class KnnModel:
         Quantities are all normalized in [0,1] the unit circle radius
         since the problem relates to probability which is always in [0,1].
         sqd in [0,4] hence to bring it in [0,1] it is divided by 4.
+
+        In the following dataset, point_1 = case_1 and point_2 = case_2
+        For each point the sqd from the query point (aka test) is computed.
+        Simplified Study Case (as starter):
+        -----------------------------------
+                option_1 option_2  choice  weights
+        case_1  4.5      3         1       w1
+        case_2  1        1.5       2       w2
+        test    3.5      2         ?       -
+
+        Then the probabilities of each data point (aka case) are:
+        P(1) = w1/(w1+w2)
+        P(0) = w2/(w1+w2)
         
         """
         weight = []
