@@ -82,8 +82,11 @@ class KnnModel:
     
     def compute_weights(self, dataset, test):
         """
-        sqd = squared_euclidean_distance
-        Weight = 1 - sqd/4
+        sqd = squared_euclidean_distance: it measures the distance between
+        two points on the unit circle
+        weight: it measures the closeness between the same two points
+        weight = 1 - sqd/4
+        
         Quantities are all normalized in [0,1] the unit circle radius
         since the problem relates to probability which is always in [0,1].
         sqd in [0,4] hence to bring it in [0,1] it is divided by 4.
