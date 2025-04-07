@@ -14,8 +14,8 @@ case where option_1 = option_2)
 Step #1: grab the following data from a spreadsheet
 
         option_1 option_2  choice
-case_2  4.5      3         1
-case_1  1        1.5       2
+case_1  4.5      3         1 (option_1 is selected)
+case_2  1        1.5       0 (option_2 is selected)
 case_3  4        4         1
 query   3.5      2         ?
 
@@ -33,8 +33,8 @@ Step #6: Print Results
 Simplified Study Case (as starter):
 -----------------------------------
         option_1 option_2  choice
-case_1  4.5      3         1
-case_2  1        1.5       2
+case_1  4.5      3         1 (option_1 is selected)
+case_2  1        1.5       0 (option_2 is selected)
 test    3.5      2         ?
 """
 
