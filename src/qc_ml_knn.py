@@ -81,7 +81,7 @@ Quantum Machine Learning steps:
     (a,b) -> Q0=1
     (c,d) -> Q0=0
 
-    Q3,Q2,Q1,Q0 -> dataset values
+    Q3,Q2,Q1,Q0 -> |v>: state vector  values to initialize the 4 qubits
     0000 -> 0
     0001 -> a <- "a" is stored where Q0=1 (label 1)
     0010 -> 0
@@ -105,6 +105,94 @@ Quantum Machine Learning steps:
     The constant value 2 ensures that the sum of the squares of all those values
     adds up to 1 (because they are the result of applying an Hadamart gate to 4 qubits
     which originates a 16x16 matrix multiplied by a 1/2 constant)
+
+    11. To the state vector obtained at point 10. it is applied the following Hadamard
+    transformation T:
+    T = H (x) I (x) I (x) I = (1/sqrt(2))[16 rows x 16 columns]
+    where H Hdamard matrix; I identity matrix; (x):tensorial product;
+    T has 16 rows x 16 columns
+
+    12. Applying the transformation T to |v>: T|v> we obtain the following column matrix (vector):
+    [0, a+e, 0, b+f, c+e, 0, d+f, 0, 0, a-e, 0, b-f, c-e, 0, d-f].
+    This has to be multiplied by (1/sqrt(2)) but it will be done later for simplicity.
+
+    13. Recalling point 9 Q3,Q2,Q1,Q0 -> |v>; we will collect measurements only when
+    Q3 measurement is zero hence we set to zero all the components of the initialization
+    state vector where Q3 is 1 [motivation TBD]. See below we set to zero the last eight element
+    of |v>:
+
+    Q3,Q2,Q1,Q0 -> |v>: state vector  values to initialize the 4 qubits
+    0000 -> 0
+    0001 -> a <- "a" is stored where Q0=1 (label 1)
+    0010 -> 0
+    0011 -> b
+    0100 -> c <- "c" is stored where Q0=0 (label 0)
+    0101 -> 0
+    0110 -> d
+    0111 -> 0
+    1000 -> 0|<- 1000 and 1001 are for e (when query (e,f) is labelled 1)
+    1001 -> 0|
+    1010 -> 0|<-1010 and 1011 are for f (when query (e,f) is labelled 1)
+    1011 -> 0|
+    1100 -> 0| <- repeated (when query (e,f) is labelled 0)
+    1101 -> 0| 
+    1110 -> 0| <- repeated (when query (e,f) is labelled 0)
+    1111 -> 0|
+
+    Hence T|v> = [0, a+e, 0, b+f, c+e, 0, d+f, 0, 0, a-e, 0, b-f, c-e, 0, d-f]
+    becomes 
+    [0, a+e, 0, b+f, c+e, 0, d+f, 0, 0, 0, 0, 0, 0, 0, 0]
+    each element of this vector corresponds to a probabiliy P() in Q0.
+
+    14. Q0 is measured. It is of interest the probability P(1) of Q0 to be equal to 1.
+    Specifically look at 
+            option_1 option_2  choice(label)   P
+    case_1  a        b         1               P(1) = 1 and P(0) = 0
+    case_2  c        d         0
+    test    e        f         ?
+
+    For data point (a,b) case_1  the ML model choice has to be 1 hence its probability
+    P(1) (the probability that this happens) has to be 1 hence the other choice is P(0)=0.
+
+    Hence looking at the qubits to datapoint relations above we see:
+
+    Q3,Q2,Q1,Q0 -> |v>:
+    0001 -> a
+    0011 -> b
+    
+    which in the the state vector T|v> = [0, a+e, 0, b+f, c+e, 0, d+f, 0, 0, 0, 0, 0, 0, 0, 0]
+    corresponds to the elements a+e and b+f
+
+    hence considering the probability definition:
+
+                number of event favorable outcomes
+    P(event) = -----------------------------------
+                    number of all outcomes
+
+                (a+e)^2 + (b+f)^2
+   P(1) = -----------------------------------
+        (a+e)^2 + (b+f)^2 + (c+e)^2 + (d+f)^2
+
+    since all the datapoints are normalized hece they are on the same unit circle
+    we have the following properties:
+
+    a^2 + b^2 = 1
+    c^2 + d^2 = 1
+    e^2 + f^2 = 1
+
+    by expanding the (a+e)^2 = a^2 + b^2 + 2ab = 2ab (do the same for the other elements
+    in the P(1) formula) and we get
+
+                1 + ae + bf
+    P(1) = --------------------------
+            2 + ae + bf + ce + df
+     
+
+
+
+
+
+
 
 
 """
