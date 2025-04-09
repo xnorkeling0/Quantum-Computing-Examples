@@ -186,21 +186,14 @@ Quantum Machine Learning steps:
                 1 + ae + bf
     P(1) = --------------------------
             2 + ae + bf + ce + df
-     
-
-
-
-
-
-
-
-
 """
 
 dataset = get_dataset(db_path)
 test = [3.5, 2]
-
-initial_state = [
+# Initialize the 4 quibits Q3Q2Q1Q0 state vector with amplitude encoding
+# see point 13. in the docstring. Here the vector has also been multiplied
+# by the factor 1/2 from the 4qubits Hadamard operator.
+initial_state = [ 
     0,
     dataset[0][0]/2,
     0,
@@ -221,8 +214,8 @@ initial_state = [
 circuit = QuantumCircuit(4,2) # 4 qubits, 2 classical
 circuit.initialize(initial_state)
 circuit.h(3) # add Hadamart gate on qubit 3; 
-circuit.measure(3,0)
-circuit.measure(0,1)
+circuit.measure(3,0) # Qubit Q3 measured value is stored into classical bit 0 
+circuit.measure(0,1) # Qubit Q0 measured value is stored into classical bit 1
 
 # 2. Define the observable to be measured 
 operator = SparsePauliOp.from_list([("XXY", 1), ("XYX", 1), ("YXX", 1), ("YYY", -1)])
