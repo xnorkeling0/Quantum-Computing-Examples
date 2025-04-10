@@ -275,7 +275,7 @@ for i in range(0,shots):
             numerator+=1
 
 p1 = numerator/denominator
-p2 = (denominator-numerator)/numerator
+p0 = (denominator-numerator)/numerator
 print(f"P(1)={p1}\nP(0)={p0}")
 
 """
