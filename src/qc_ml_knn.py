@@ -215,8 +215,7 @@ circuit.measure(3,0) # Qubit Q3 measured value is stored into classical bit 0
 circuit.measure(0,1) # Qubit Q0 measured value is stored into classical bit 1
 
 # 2. Define the observable to be measured 
-operator = SparsePauliOp.from_list([("XXY", 1), ("XYX", 1), ("YXX", 1), ("YYY", -1)])
-print(f"The operators strings:\n{operator}")
+
 # 3. Optimize the problem
 token  = os.getenv('IBM_QUANTUM_TOKEN') # getting the custom env variable that stores my IBM token
 service = QiskitRuntimeService(channel="ibm_quantum", token=token)
@@ -225,8 +224,9 @@ pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=
 qc_transpiled = pass_manager.run(circuit)
 
 # 3. Execute using the Sampler primitive
+shots = 20000
 sampler = Sampler(mode=backend)
-sampler.options.default_shots = 1024  # Options can be set using auto-complete.
+sampler.options.default_shots = shots  # Options can be set using auto-complete.
 job = sampler.run([qc_transpiled])
 print(f"Job ID is {job.job_id()}")
 result = job.result()[0]
@@ -243,9 +243,10 @@ print(f"Counts for the meas output register: {counts}")
 # denominator is counted only when Q3 is zero (see explanation point 13.)
 # under this condition the numerator is counted 
 
+# Probabilities computation
 numerator = 0
 denominator = 0
-shots = 20000
+
 for i in range(0,shots):
     if("00" in counts or "10" in counts):
         state = result.data(0)
