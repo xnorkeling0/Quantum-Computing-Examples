@@ -250,8 +250,22 @@ sampler.options.default_shots = shots  # Options can be set using auto-complete.
 job = sampler.run([qc_transpiled])
 print(f"Job ID is {job.job_id()}")
 result = job.result()[0]
-counts = result.data.meas.get_counts()
-print(f"Counts for the meas output register: {counts}")
+
+print(f"Results: {result}")
+print(f"Classical registers names: {result[0].data}")
+
+"""
+Results: SamplerPubResult(data=DataBin(c=BitArray(<shape=(), num_shots=20000, num_bits=2>)), metadata={'circuit_metadata': {}})
+Traceback (most recent call last):
+  File "/Users/xnorkeling/Documents/xnorkeling/Quantum-Computing-Examples/src/qc_ml_knn.py", line 255, in <module>
+    print(f"Classical registers names: {result[0].data}")
+                                        ~~~~~~^^^
+TypeError: 'SamplerPubResult' object is not subscriptable
+"""
+# counts = result.data.meas.get_counts()
+# print(f"Counts for the meas output register: {counts}")
+
+
 
 # counts contains the values for the two classical bit c0 and c1 in the form c1c0
 # In the circuit c0 measure Q0 and c1 measures Q3
@@ -264,19 +278,19 @@ print(f"Counts for the meas output register: {counts}")
 # under this condition the numerator is counted 
 
 # Probabilities computation
-numerator = 0
-denominator = 0
-
-for i in range(0,shots):
-    if("00" in counts or "10" in counts):
-        state = result.data(0)
-        denominator+=1
-        if ("10" in counts):
-            numerator+=1
-
-p1 = numerator/denominator
-p0 = (denominator-numerator)/numerator
-print(f"P(1)={p1}\nP(0)={p0}")
+# numerator = 0
+# denominator = 0
+# 
+# for i in range(0,shots):
+#     if("00" in counts or "10" in counts):
+#         state = result.data(0)
+#         denominator+=1
+#         if ("10" in counts):
+#             numerator+=1
+# 
+# p1 = numerator/denominator
+# p0 = (denominator-numerator)/numerator
+# print(f"P(1)={p1}\nP(0)={p0}")
 
 """
 To run the script, in CLI enter:
