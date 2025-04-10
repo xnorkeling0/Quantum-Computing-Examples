@@ -2,6 +2,7 @@
 
 from qiskit import QuantumCircuit
 import pandas as pd
+from math import sqrt
 
 import os
 import sys
@@ -27,6 +28,23 @@ def get_dataset(db_path):
     #     [1, 1.5, 2]
     # ]
 
+def normalize_dataset(dataset: list):
+    for i in range(len(dataset)):
+        base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
+        dataset[i][0] = dataset[i][0]/base
+        dataset[i][1] = dataset[i][1]/base
+        vector_length = sqrt((dataset[i][0])**2 + (dataset[i][1])**2)
+        print(f"Vector {i + 1} length after normalization: {vector_length}")
+    return dataset
+
+def normalize_test_set(test_set: list):
+    base = sqrt(test_set[0]**2 + test_set[1]**2)
+    test_set[0] = test_set[0]/base
+    test_set[1] = test_set[1]/base
+    vector_length = sqrt((test_set[0])**2 + (test_set[1])**2)
+    print(f"Normalized test points:\n{test_set[0]}\n{test_set[1]}")
+    print(f"test set euclidian vector length: {vector_length}")
+    return test_set
 """
 Simplified Study Case (dataset):
 -----------------------------------
@@ -185,8 +203,10 @@ Quantum Machine Learning steps:
             2 + ae + bf + ce + df
 """
 
-dataset = get_dataset(db_path)
-test = [3.5, 2]
+dataset = normalize_dataset(get_dataset(db_path))
+test = normalize_test_set([3.5, 2])
+
+
 # Initialize the 4 quibits Q3Q2Q1Q0 state vector with amplitude encoding
 # see point 13. in the docstring. Here the vector has also been multiplied
 # by the factor 1/2 from the 4qubits Hadamard operator.
@@ -258,4 +278,8 @@ p1 = numerator/denominator
 p2 = (denominator-numerator)/numerator
 print(f"P(1)={p1}\nP(0)={p0}")
 
+"""
+To run the script, in CLI enter:
+python src/qc_ml_knn.py
+"""
 
