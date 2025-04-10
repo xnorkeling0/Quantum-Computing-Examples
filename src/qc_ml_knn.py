@@ -10,11 +10,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.save_account import save_account, get_first_available_backend
 import numpy as np
 from qiskit import QuantumCircuit, transpile
-from qiskit.primitives import StatevectorSampler, StatevectorEstimator
-from qiskit.quantum_info import SparsePauliOp
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
-from qiskit_ibm_runtime import QiskitRuntimeService, EstimatorOptions, EstimatorV2 as Estimator
-from qiskit_ibm_runtime.options.resilience_options import ResilienceOptionsV2
+from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
 
 db_path = "src/dataset.csv"
 
@@ -226,5 +223,38 @@ service = QiskitRuntimeService(channel="ibm_quantum", token=token)
 backend = service.least_busy(operational=True, simulator=False)
 pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=1)
 qc_transpiled = pass_manager.run(circuit)
-operator_transpiled = operator.apply_layout(layout=qc_transpiled.layout)
+
+# 3. Execute using the Sampler primitive
+sampler = Sampler(mode=backend)
+sampler.options.default_shots = 1024  # Options can be set using auto-complete.
+job = sampler.run([qc_transpiled])
+print(f"Job ID is {job.job_id()}")
+result = job.result()[0]
+counts = result.data.meas.get_counts()
+print(f"Counts for the meas output register: {counts}")
+
+# counts contains the values for the two classical bit c0 and c1 in the form c1c0
+# In the circuit c0 measure Q0 and c1 measures Q3
+# c0 --> Q3
+# c1 --> Q0
+# we need to compute probability of Q0 = 1 when Q3 is zero
+# hence we need to count statistics components to obtain  a numerator 
+# and a denominator for the probability formula
+# denominator is counted only when Q3 is zero (see explanation point 13.)
+# under this condition the numerator is counted 
+
+numerator = 0
+denominator = 0
+shots = 20000
+for i in range(0,shots):
+    if("00" in counts or "10" in counts):
+        state = result.data(0)
+        denominator+=1
+        if ("10" in counts):
+            numerator+=1
+
+p1 = numerator/denominator
+p2 = (denominator-numerator)/numerator
+print(f"P(1)={p1}\nP(0)={p0}")
+
 
