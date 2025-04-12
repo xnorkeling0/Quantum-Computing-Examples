@@ -55,9 +55,9 @@ test    3.5      2         ?
 
 in general:
 -----------------------------------
-        option_1 option_2  choice(label)
-case_1  a        b         1
-case_2  c        d         0
+        option_1 option_2  choice(label)   Probability
+case_1  a        b         1               P(1)=1
+case_2  c        d         0               P(0)=0
 test    e        f         ?
 
 Quantum Machine Learning steps:
