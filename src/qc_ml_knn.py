@@ -250,17 +250,28 @@ sampler.options.default_shots = shots  # Options can be set using auto-complete.
 job = sampler.run([qc_transpiled])
 print(f"Job ID is {job.job_id()}")
 result = job.result()[0]
+counts = result.join_data().get_counts() # combine the results of all registers
+# Getting counts for separate registers
+# https://quantumcomputing.stackexchange.com/questions/40735/getting-combined-counts-when-using-qiskit-ibm-runtime-samplerv2/40736#40736
 
-print(f"Results: {result}")
-print(f"Classical registers names: {result[0].data}")
+
+for bitstring, count in counts.items():
+    print(f"{bitstring}: {count}")
+
+# counts_dict = {}
+# for i, pub_res in enumerate(result):
+#     for key, val in pub_res.data.items(): # iterate over each of the register results
+#         reg_name = f'cir_{i}_{key}' # keys are the register names
+#         counts_dict[reg_name] = val.get_counts() # values have the experiment results
+#         print(f"Register name: {reg_name}")
+#         print(f"value: {result[0].data}")
 
 """
-Results: SamplerPubResult(data=DataBin(c=BitArray(<shape=(), num_shots=20000, num_bits=2>)), metadata={'circuit_metadata': {}})
 Traceback (most recent call last):
-  File "/Users/xnorkeling/Documents/xnorkeling/Quantum-Computing-Examples/src/qc_ml_knn.py", line 255, in <module>
-    print(f"Classical registers names: {result[0].data}")
-                                        ~~~~~~^^^
-TypeError: 'SamplerPubResult' object is not subscriptable
+  File "/Users/xnorkeling/Documents/xnorkeling/Quantum-Computing-Examples/src/qc_ml_knn.py", line 257, in <module>
+    for i, pub_res in enumerate(result):
+                      ^^^^^^^^^^^^^^^^^
+TypeError: 'SamplerPubResult' object is not iterable
 """
 # counts = result.data.meas.get_counts()
 # print(f"Counts for the meas output register: {counts}")
