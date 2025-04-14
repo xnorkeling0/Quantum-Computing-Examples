@@ -244,7 +244,7 @@ pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=
 qc_transpiled = pass_manager.run(circuit)
 
 # 3. Execute using the Sampler primitive
-shots = 20000
+shots = 1
 sampler = Sampler(mode=backend)
 sampler.options.default_shots = shots  # Options can be set using auto-complete.
 job = sampler.run([qc_transpiled])
@@ -254,9 +254,30 @@ counts = result.join_data().get_counts() # combine the results of all registers
 # Getting counts for separate registers
 # https://quantumcomputing.stackexchange.com/questions/40735/getting-combined-counts-when-using-qiskit-ibm-runtime-samplerv2/40736#40736
 
-
+numerator = 0
+denominator = 0
+print(f"Results:{result}")
 for bitstring, count in counts.items():
     print(f"{bitstring}: {count}")
+    """
+    Printed result:
+        01: 602
+        00: 9465
+        10: 9716
+        11: 217
+    """
+
+
+    if "00" in counts and "10" in counts:
+        denominator += 1  # Increment denominator if condition is met
+
+        # Check if "10" is in counts under the same condition
+        if bitstring == "10":
+            numerator += 1  # Increment numerator
+
+
+
+print(f"P(1) = {numerator/denominator}, P(0)={(denominator-numerator)/denominator}")
 
 # counts_dict = {}
 # for i, pub_res in enumerate(result):
@@ -278,7 +299,7 @@ TypeError: 'SamplerPubResult' object is not iterable
 
 
 
-# counts contains the values for the two classical bit c0 and c1 in the form c1c0
+# counts contains the values for the two classical bit c0 and c1 in the form c1c0 --> Q0Q1
 # In the circuit c0 measure Q0 and c1 measures Q3
 # c0 --> Q3
 # c1 --> Q0
