@@ -39,6 +39,7 @@ test    3.5      2         ?
 """
 
 # Simplified Study Case:
+from pathlib import Path
 import pandas as pd
 from math import sqrt
 
@@ -140,9 +141,9 @@ if __name__ == "__main__":
     #     [4.5, 3, 1],
     #     [1, 1.5, 2]
     # ]
-    db_path = "src/dataset.csv"
+    current_dir = Path(__file__).parent
+    db_path = current_dir / "dataset.csv"
     test = [3.5, 2]
-
     ml_model_inst = KnnModel(db_path, test)
     ml_model_inst.run()
 
