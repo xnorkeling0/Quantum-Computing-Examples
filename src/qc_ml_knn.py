@@ -265,7 +265,7 @@ under this condition the numerator is counted
 """
 numerator = 0
 denominator = 0
-shots = 10
+shots = 50
 for i in range(shots):
     job = sampler.run([qc_transpiled])
     print(f"Job ID is {job.job_id()}")
@@ -275,6 +275,72 @@ for i in range(shots):
         denominator += 1  # Increment denominator if condition is met
         if "10" in counts :
             numerator += 1  # Increment numerator
+
+"""
+This is the console output of a succesful result with 50 shots which so far was the minimum number shots
+necessary to achive the same result of the classical machine learning example (ml_knn.py)
+(.venv) xnorkeling@MyMpro Quantum-Computing-Examples % python src/qc_ml_knn.py
+The Dataset:
+[[4.5, 3.0, 1.0], [1.0, 1.5, 2.0]]
+Vector 1 length after normalization: 0.9999999999999999
+Vector 2 length after normalization: 1.0
+Normalized test points:
+0.8682431421244593
+0.49613893835683387
+test set euclidian vector length: 1.0
+Job ID is czy6mc1kzhn0008d754g
+Job ID is czy6mdsnhqag008tq11g
+Job ID is czy6mfhnhqag008tq120
+Job ID is czy6mhad8drg008hvd1g
+Job ID is czy6mkanhqag008tq12g
+Job ID is czy6mn2qnmvg008w1v20
+Job ID is czy6mptkzhn0008d7550
+Job ID is czy6mrknhqag008tq140
+Job ID is czy6mtbqnmvg008w1v30
+Job ID is czy6mw3qnmvg008w1v40
+Job ID is czy6mxv6rr3g008mdyrg
+Job ID is czy6mzbnhqag008tq14g
+Job ID is czy6n146rr3g008mdys0
+Job ID is czy6n2w6rr3g008mdysg
+Job ID is czy6n4ckzhn0008d757g
+Job ID is czy6n64kzhn0008d758g
+Job ID is czy6n7wd8drg008hvd40
+Job ID is czy6n9nkzhn0008d7590
+Job ID is czy6nbdkzhn0008d759g
+Job ID is czy6nd5rxz8g008f46t0
+Job ID is czy6nexkzhn0008d75a0
+Job ID is czy6ngpd8drg008hvd5g
+Job ID is czy6nj6kzhn0008d75ag
+Job ID is czy6nkyrxz8g008f46wg
+Job ID is czy6nnpqnmvg008w1v9g
+Job ID is czy6nqerxz8g008f46y0
+Job ID is czy6nrzkzhn0008d75c0
+Job ID is czy6ntfkzhn0008d75cg
+Job ID is czy6nw7d8drg008hvd70
+Job ID is czy6nxzqnmvg008w1vcg
+Job ID is czy6p9snhqag008tq1bg
+Job ID is czy6pbhrxz8g008f4700
+Job ID is czy6pd9d8drg008hvda0
+Job ID is czy6pf1d8drg008hvdbg
+Job ID is czy6pgarxz8g008f471g
+Job ID is czy6pj26rr3g008mdyxg
+Job ID is czy6pkt6rr3g008mdyy0
+Job ID is czy6pnakzhn0008d75f0
+Job ID is czy6pqa6rr3g008mdyyg
+Job ID is czy6ps3rxz8g008f4730
+Job ID is czy6ptv6rr3g008mdz0g
+Job ID is czy6pwkd8drg008hvdcg
+Job ID is czy6pybqnmvg008w1vj0
+Job ID is czy6q04d8drg008hvddg
+Job ID is czy6q1w6rr3g008mdz30
+Job ID is czy6q3cnhqag008tq1h0
+Job ID is czy6q54kzhn0008d75k0
+Job ID is czy6q6mkzhn0008d75m0
+Job ID is czy6q8drxz8g008f476g
+Job ID is czy6q9xrxz8g008f4770
+P(1) = 1.0, P(0)=0.0
+"""
+
 
 # for bitstring, count in counts.items():
 #     print(f"{bitstring}: {count}")
