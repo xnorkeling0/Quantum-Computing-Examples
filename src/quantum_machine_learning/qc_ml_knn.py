@@ -1,5 +1,5 @@
 """Quantum Computing Machine Learning Example"""
-
+# TODO: verify this script since it has been moved to a new folder:
 from qiskit import QuantumCircuit
 import pandas as pd
 from math import sqrt
@@ -7,16 +7,16 @@ from math import sqrt
 import os
 import sys
 # Add the parent directory to the PYTHONPATH 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) # TODO: check if it needs to be modified after migration to new folder
 from utils.save_account import save_account, get_first_available_backend
 import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
 
-db_path = "src/dataset.csv"
+db_path = "src/dataset.csv" # TODO: automate with Path
 
-def get_dataset(db_path):
+def get_dataset(db_path):  # TODO:move to common module
     df = pd.read_csv(db_path)
     dataset = df.values.tolist()
     print(f"The Dataset:\n{dataset}")
@@ -28,7 +28,7 @@ def get_dataset(db_path):
     #     [1, 1.5, 2]
     # ]
 
-def normalize_dataset(dataset: list):
+def normalize_dataset(dataset: list):  # TODO:move to common module
     for i in range(len(dataset)):
         base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
         dataset[i][0] = dataset[i][0]/base
@@ -37,7 +37,7 @@ def normalize_dataset(dataset: list):
         print(f"Vector {i + 1} length after normalization: {vector_length}")
     return dataset
 
-def normalize_test_set(test_set: list):
+def normalize_test_set(test_set: list):  # TODO:move to common module
     base = sqrt(test_set[0]**2 + test_set[1]**2)
     test_set[0] = test_set[0]/base
     test_set[1] = test_set[1]/base
