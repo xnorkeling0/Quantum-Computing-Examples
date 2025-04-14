@@ -243,86 +243,51 @@ backend = service.least_busy(operational=True, simulator=False)
 pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=1)
 qc_transpiled = pass_manager.run(circuit)
 
-# 3. Execute using the Sampler primitive
+# 3. Execute on a Quantum Computer using the Sampler primitive
 shots = 1
 sampler = Sampler(mode=backend)
 sampler.options.default_shots = shots  # Options can be set using auto-complete.
-job = sampler.run([qc_transpiled])
-print(f"Job ID is {job.job_id()}")
-result = job.result()[0]
-counts = result.join_data().get_counts() # combine the results of all registers
+
 # Getting counts for separate registers
 # https://quantumcomputing.stackexchange.com/questions/40735/getting-combined-counts-when-using-qiskit-ibm-runtime-samplerv2/40736#40736
 
+
+"""
+counts contains the values for the two classical bit c0 and c1 in the form c1c0 --> Q0Q1
+In the circuit c0 measure Q0 and c1 measures Q3
+c0 --> Q3
+c1 --> Q0
+we need to compute probability of Q0 = 1 when Q3 is zero
+hence we need to count statistics components to obtain  a numerator 
+and a denominator for the probability formula
+denominator is counted only when Q3 is zero (see explanation point 13.)
+under this condition the numerator is counted 
+"""
 numerator = 0
 denominator = 0
-print(f"Results:{result}")
-for bitstring, count in counts.items():
-    print(f"{bitstring}: {count}")
-    """
-    Printed result:
-        01: 602
-        00: 9465
-        10: 9716
-        11: 217
-    """
-
-
-    if "00" in counts and "10" in counts:
+shots = 10
+for i in range(shots):
+    job = sampler.run([qc_transpiled])
+    print(f"Job ID is {job.job_id()}")
+    result = job.result()[0]
+    counts = result.join_data().get_counts()
+    if ("00" in counts or "10" in counts):
         denominator += 1  # Increment denominator if condition is met
-
-        # Check if "10" is in counts under the same condition
-        if bitstring == "10":
+        if "10" in counts :
             numerator += 1  # Increment numerator
 
+# for bitstring, count in counts.items():
+#     print(f"{bitstring}: {count}")
+"""
+ Printed result:
+     01: 602
+     00: 9465
+     10: 9716
+     11: 217
+ """
 
 
 print(f"P(1) = {numerator/denominator}, P(0)={(denominator-numerator)/denominator}")
-
-# counts_dict = {}
-# for i, pub_res in enumerate(result):
-#     for key, val in pub_res.data.items(): # iterate over each of the register results
-#         reg_name = f'cir_{i}_{key}' # keys are the register names
-#         counts_dict[reg_name] = val.get_counts() # values have the experiment results
-#         print(f"Register name: {reg_name}")
-#         print(f"value: {result[0].data}")
-
-"""
-Traceback (most recent call last):
-  File "/Users/xnorkeling/Documents/xnorkeling/Quantum-Computing-Examples/src/qc_ml_knn.py", line 257, in <module>
-    for i, pub_res in enumerate(result):
-                      ^^^^^^^^^^^^^^^^^
-TypeError: 'SamplerPubResult' object is not iterable
-"""
-# counts = result.data.meas.get_counts()
-# print(f"Counts for the meas output register: {counts}")
-
-
-
-# counts contains the values for the two classical bit c0 and c1 in the form c1c0 --> Q0Q1
-# In the circuit c0 measure Q0 and c1 measures Q3
-# c0 --> Q3
-# c1 --> Q0
-# we need to compute probability of Q0 = 1 when Q3 is zero
-# hence we need to count statistics components to obtain  a numerator 
-# and a denominator for the probability formula
-# denominator is counted only when Q3 is zero (see explanation point 13.)
-# under this condition the numerator is counted 
-
-# Probabilities computation
-# numerator = 0
-# denominator = 0
-# 
-# for i in range(0,shots):
-#     if("00" in counts or "10" in counts):
-#         state = result.data(0)
-#         denominator+=1
-#         if ("10" in counts):
-#             numerator+=1
-# 
-# p1 = numerator/denominator
-# p0 = (denominator-numerator)/numerator
-# print(f"P(1)={p1}\nP(0)={p0}")
 
 """
 To run the script, in CLI enter:
