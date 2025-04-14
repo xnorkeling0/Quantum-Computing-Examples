@@ -345,7 +345,10 @@ P(1) = 1.0, P(0)=0.0
 # for bitstring, count in counts.items():
 #     print(f"{bitstring}: {count}")
 """
- Printed result:
+ Printed result: 
+ strings and their occurencies. Basically per each string it is printed
+ how many times it was detected when running the given circuit for the
+ specified number of shots.
      01: 602
      00: 9465
      10: 9716
