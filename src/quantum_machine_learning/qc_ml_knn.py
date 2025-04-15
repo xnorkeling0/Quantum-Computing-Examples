@@ -1,6 +1,5 @@
 """Quantum Computing Machine Learning Example"""
 
-# TODO: verify this script since it has been moved to a new folder:
 
 import os
 import sys
@@ -17,37 +16,6 @@ from utils.save_account import save_account, get_first_available_backend
 from data_processing import get_dataset, normalize_dataset, normalize_test_set
 
 
-db_path = str(Path("src") / "quantum_machine_learning" / "dataset.csv")
-
-# def get_dataset(db_path):  # TODO:move to common module
-#     df = pd.read_csv(db_path)
-#     dataset = df.values.tolist()
-#     print(f"The Dataset:\n{dataset}")
-#     return dataset
-#     # The dataset from src/dataset.csv:
-#     # (It needs an empty row above the first data row)
-#     # dataset = [
-#     #     [4.5, 3, 1],
-#     #     [1, 1.5, 2]
-#     # ]
-# 
-# def normalize_dataset(dataset: list):  # TODO:move to common module
-#     for i in range(len(dataset)):
-#         base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
-#         dataset[i][0] = dataset[i][0]/base
-#         dataset[i][1] = dataset[i][1]/base
-#         vector_length = sqrt((dataset[i][0])**2 + (dataset[i][1])**2)
-#         print(f"Vector {i + 1} length after normalization: {vector_length}")
-#     return dataset
-# 
-# def normalize_test_set(test_set: list):  # TODO:move to common module
-#     base = sqrt(test_set[0]**2 + test_set[1]**2)
-#     test_set[0] = test_set[0]/base
-#     test_set[1] = test_set[1]/base
-#     vector_length = sqrt((test_set[0])**2 + (test_set[1])**2)
-#     print(f"Normalized test points:\n{test_set[0]}\n{test_set[1]}")
-#     print(f"test set euclidian vector length: {vector_length}")
-#     return test_set
 """
 Simplified Study Case (dataset):
 -----------------------------------
@@ -204,12 +172,14 @@ Quantum Machine Learning steps:
                 1 + ae + bf
     P(1) = --------------------------
             2 + ae + bf + ce + df
+
+To run the script, in CLI enter:
+python src/quantum_machine_learning/qc_ml_knn.py
 """
 
+db_path = str(Path("src") / "quantum_machine_learning" / "dataset.csv")
 dataset = normalize_dataset(get_dataset(db_path))
 test = normalize_test_set([3.5, 2])
-
-
 # Initialize the 4 quibits Q3Q2Q1Q0 state vector with amplitude encoding
 # see point 13. in the docstring. Here the vector has also been multiplied
 # by the factor 1/2 from the 4qubits Hadamard operator.
@@ -251,11 +221,10 @@ shots = 1
 sampler = Sampler(mode=backend)
 sampler.options.default_shots = shots  # Options can be set using auto-complete.
 
-# Getting counts for separate registers
-# https://quantumcomputing.stackexchange.com/questions/40735/getting-combined-counts-when-using-qiskit-ibm-runtime-samplerv2/40736#40736
-
-
 """
+Getting counts for separate registers
+https://quantumcomputing.stackexchange.com/questions/40735/getting-combined-counts-when-using-qiskit-ibm-runtime-samplerv2/40736#40736
+
 counts contains the values for the two classical bit c0 and c1 in the form c1c0 --> Q0Q1
 In the circuit c0 measure Q0 and c1 measures Q3
 c0 --> Q3
@@ -299,10 +268,4 @@ if denominator !=0:
 else:
     print("Division by zero detected in probability formula")
 
-"""
-To run the script, in CLI enter:
-python src/quantum_machine_learning/qc_ml_knn.py
-"""
 
-jobs = service.jobs(created_after=datetime.datetime.now() - datetime.timedelta(days=90))
-print(jobs)
