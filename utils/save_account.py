@@ -1,4 +1,7 @@
+import os
+from qiskit import QuantumCircuit
 from qiskit_ibm_runtime import QiskitRuntimeService, ibm_backend
+from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 
 def save_account(token, channel: str="ibm_quantum"):
     """
@@ -31,3 +34,23 @@ def get_first_available_backend(token:str, channel: str="ibm_quantum") -> ibm_ba
             print({backend.name: f"available with {backend.num_qubits} qubits"})
             break
     return backend
+
+def transpile_circuit(
+        circuit: QuantumCircuit,
+        channel: str = "ibm_quantum",
+        operational: bool = True,
+        simulator: bool = False,
+        optimization_level: int = 1
+        )->QuantumCircuit:
+    """
+    Performs all the necessary steps to generate a transpiled circuit to run on a real IBM quantum computer
+    including:
+        -   getting user account token
+        -   instantiating the service, backend and pass manager
+    """
+    token  = os.getenv('IBM_QUANTUM_TOKEN') # getting the custom env variable that stores my IBM token
+    service = QiskitRuntimeService(channel=channel, token=token)
+    backend = service.least_busy(operational=operational, simulator=simulator)
+    pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=optimization_level)
+    qc_transpiled = pass_manager.run(circuit)
+    return backend, qc_transpiled

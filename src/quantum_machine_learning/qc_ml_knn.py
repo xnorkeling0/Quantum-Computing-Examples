@@ -12,7 +12,7 @@ from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
 # Add the parent directory to the PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from utils.save_account import save_account, get_first_available_backend
+from utils.save_account import save_account, get_first_available_backend, transpile_circuit
 from data_processing import get_dataset, normalize_dataset, normalize_test_set
 
 
@@ -210,11 +210,12 @@ circuit.measure(0,1) # Qubit Q0 measured value is stored into classical bit 1
 # 2. Define the observable to be measured 
 
 # 3. Optimize the problem
-token  = os.getenv('IBM_QUANTUM_TOKEN') # getting the custom env variable that stores my IBM token
-service = QiskitRuntimeService(channel="ibm_quantum", token=token)
-backend = service.least_busy(operational=True, simulator=False)
-pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=1)
-qc_transpiled = pass_manager.run(circuit)
+backend, qc_transpiled = transpile_circuit(circuit)
+# token  = os.getenv('IBM_QUANTUM_TOKEN') # getting the custom env variable that stores my IBM token
+# service = QiskitRuntimeService(channel="ibm_quantum", token=token)
+# backend = service.least_busy(operational=True, simulator=False)
+# pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=1)
+# qc_transpiled = pass_manager.run(circuit)
 
 # 3. Execute on a Quantum Computer using the Sampler primitive
 shots = 1
