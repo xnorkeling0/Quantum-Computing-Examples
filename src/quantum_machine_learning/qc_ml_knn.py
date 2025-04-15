@@ -211,11 +211,6 @@ circuit.measure(0,1) # Qubit Q0 measured value is stored into classical bit 1
 
 # 3. Optimize the problem
 backend, qc_transpiled = transpile_circuit(circuit)
-# token  = os.getenv('IBM_QUANTUM_TOKEN') # getting the custom env variable that stores my IBM token
-# service = QiskitRuntimeService(channel="ibm_quantum", token=token)
-# backend = service.least_busy(operational=True, simulator=False)
-# pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=1)
-# qc_transpiled = pass_manager.run(circuit)
 
 # 3. Execute on a Quantum Computer using the Sampler primitive
 shots = 1
