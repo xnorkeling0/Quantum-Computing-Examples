@@ -31,11 +31,7 @@ def main():
     print(f"The operators strings:\n{operator}")
 
     # 3. Optimize the problem
-    token  = os.getenv('IBM_QUANTUM_TOKEN') # getting the custom env variable that stores my IBM token
-    service = QiskitRuntimeService(channel="ibm_quantum", token=token)
-    backend = service.least_busy(operational=True, simulator=False)
-    pass_manager = generate_preset_pass_manager(backend=backend, optimization_level=1)
-    qc_transpiled = pass_manager.run(qc_example)
+    backend, qc_transpiled = transpile_circuit(qc_example)
     operator_transpiled = operator.apply_layout(layout=qc_transpiled.layout)
 
     # 4. Execute on the Backend
