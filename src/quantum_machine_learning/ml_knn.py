@@ -40,8 +40,6 @@ test    3.5      2         ?
 
 # Simplified Study Case:
 from pathlib import Path
-import pandas as pd
-from math import sqrt
 from data_processing import get_dataset, normalize_dataset, normalize_test_set
 
 
