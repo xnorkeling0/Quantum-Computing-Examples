@@ -1,20 +1,21 @@
 """Quantum Computing Machine Learning Example"""
+
 # TODO: verify this script since it has been moved to a new folder:
-from qiskit import QuantumCircuit
-import pandas as pd
-from math import sqrt
 
 import os
 import sys
-# Add the parent directory to the PYTHONPATH 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) # TODO: check if it needs to be modified after migration to new folder
-from utils.save_account import save_account, get_first_available_backend
+from math import sqrt
+import pandas as pd
 import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
+# Add the parent directory to the PYTHONPATH
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))  # TODO: Verify after migration
+from utils.save_account import save_account, get_first_available_backend
 
-db_path = "src/dataset.csv" # TODO: automate with Path
+
+db_path = "src/quantum_machine_learning/dataset.csv" # TODO: automate with Path
 
 def get_dataset(db_path):  # TODO:move to common module
     df = pd.read_csv(db_path)
@@ -265,7 +266,7 @@ under this condition the numerator is counted
 """
 numerator = 0
 denominator = 0
-shots = 50
+shots = 1
 for i in range(shots):
     job = sampler.run([qc_transpiled])
     print(f"Job ID is {job.job_id()}")
@@ -276,7 +277,28 @@ for i in range(shots):
         if "10" in counts :
             numerator += 1  # Increment numerator
 
+# for bitstring, count in counts.items():
+#     print(f"{bitstring}: {count}")
 """
+ Printed result: 
+ strings and their occurencies. Basically per each string it is printed
+ how many times it was detected when running the given circuit for the
+ specified number of shots.
+     01: 602
+     00: 9465
+     10: 9716
+     11: 217
+ """
+
+if denominator !=0:
+    print(f"P(1) = {numerator/denominator}, P(0)={(denominator-numerator)/denominator}")
+else:
+    print("Division by zero detected in probability formula")
+
+"""
+To run the script, in CLI enter:
+python src/qc_ml_knn.py
+
 This is the console output of a succesful result with 50 shots which so far was the minimum number shots
 necessary to achive the same result of the classical machine learning example (ml_knn.py)
 (.venv) xnorkeling@MyMpro Quantum-Computing-Examples % python src/qc_ml_knn.py
@@ -339,27 +361,5 @@ Job ID is czy6q6mkzhn0008d75m0
 Job ID is czy6q8drxz8g008f476g
 Job ID is czy6q9xrxz8g008f4770
 P(1) = 1.0, P(0)=0.0
-"""
-
-
-# for bitstring, count in counts.items():
-#     print(f"{bitstring}: {count}")
-"""
- Printed result: 
- strings and their occurencies. Basically per each string it is printed
- how many times it was detected when running the given circuit for the
- specified number of shots.
-     01: 602
-     00: 9465
-     10: 9716
-     11: 217
- """
-
-
-print(f"P(1) = {numerator/denominator}, P(0)={(denominator-numerator)/denominator}")
-
-"""
-To run the script, in CLI enter:
-python src/qc_ml_knn.py
 """
 
