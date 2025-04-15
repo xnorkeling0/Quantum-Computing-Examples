@@ -4,6 +4,7 @@
 
 import os
 import sys
+from pathlib import Path
 from math import sqrt
 import pandas as pd
 import numpy as np
@@ -11,11 +12,11 @@ from qiskit import QuantumCircuit, transpile
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
 # Add the parent directory to the PYTHONPATH
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))  # TODO: Verify after migration
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from utils.save_account import save_account, get_first_available_backend
 
 
-db_path = "src/quantum_machine_learning/dataset.csv" # TODO: automate with Path
+db_path = str(Path("src") / "quantum_machine_learning" / "dataset.csv")
 
 def get_dataset(db_path):  # TODO:move to common module
     df = pd.read_csv(db_path)
