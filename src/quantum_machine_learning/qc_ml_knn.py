@@ -298,7 +298,7 @@ else:
 
 """
 To run the script, in CLI enter:
-python src/qc_ml_knn.py
+python src/quantum_machine_learning/qc_ml_knn.py
 
 This is the console output of a succesful result with 50 shots which so far was the minimum number shots
 necessary to achive the same result of the classical machine learning example (ml_knn.py)
