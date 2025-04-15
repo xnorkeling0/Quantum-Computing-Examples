@@ -42,6 +42,7 @@ test    3.5      2         ?
 from pathlib import Path
 import pandas as pd
 from math import sqrt
+from data_processing import get_dataset
 
 
 class KnnModel:
@@ -50,11 +51,7 @@ class KnnModel:
         self.db_path: str = db_path
         self.test: list = test
     
-    def get_dataset(self):
-        df = pd.read_csv(self.db_path)
-        dataset = df.values.tolist()
-        print(f"The Dataset:\n{dataset}")
-        return dataset
+
     
     def normalize_dataset(self, dataset: list):
         for i in range(len(dataset)):
@@ -127,7 +124,7 @@ class KnnModel:
         return weight
 
     def run(self):
-        dataset = self.get_dataset()
+        dataset = get_dataset(self.db_path)
         dataset = self.normalize_dataset(dataset)
         test = self.normalize_test_set(self.test)
         weight = self.compute_weights(dataset, test)
