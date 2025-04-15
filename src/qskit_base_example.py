@@ -2,7 +2,7 @@ import sys
 import os
 # Add the parent directory to the PYTHONPATH 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from utils.save_account import save_account, get_first_available_backend
+from utils.save_account import save_account, get_first_available_backend,transpile_circuit
 import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.primitives import StatevectorSampler, StatevectorEstimator
@@ -47,13 +47,6 @@ def main():
     print(job_status)
     pub_result = job.result()[0]
     print(f"Expectation values: {pub_result.data.evs}")
-
-
-
-
-
-
-
 
 
     # TODO: run on quantum computer following https://github.com/Qiskit/qiskit-ibm-runtime
