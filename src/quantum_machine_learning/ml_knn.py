@@ -42,7 +42,7 @@ test    3.5      2         ?
 from pathlib import Path
 import pandas as pd
 from math import sqrt
-from data_processing import get_dataset
+from data_processing import get_dataset, normalize_dataset, normalize_test_set
 
 
 class KnnModel:
@@ -50,26 +50,6 @@ class KnnModel:
     def __init__(self, db_path, test):
         self.db_path: str = db_path
         self.test: list = test
-    
-
-    
-    def normalize_dataset(self, dataset: list):
-        for i in range(len(dataset)):
-            base = sqrt(dataset[i][0]**2 + dataset[i][1]**2)
-            dataset[i][0] = dataset[i][0]/base
-            dataset[i][1] = dataset[i][1]/base
-            vector_length = sqrt((dataset[i][0])**2 + (dataset[i][1])**2)
-            print(f"Vector {i + 1} length after normalization: {vector_length}")
-        return dataset
-    
-    def normalize_test_set(self, test_set: list):
-        base = sqrt(test_set[0]**2 + test_set[1]**2)
-        test_set[0] = test_set[0]/base
-        test_set[1] = test_set[1]/base
-        vector_length = sqrt((test_set[0])**2 + (test_set[1])**2)
-        print(f"Normalized test points:\n{test_set[0]}\n{test_set[1]}")
-        print(f"test set euclidian vector length: {vector_length}")
-        return test_set
 
     def decision(self, weight):
         # ML model taking a decision
@@ -125,8 +105,8 @@ class KnnModel:
 
     def run(self):
         dataset = get_dataset(self.db_path)
-        dataset = self.normalize_dataset(dataset)
-        test = self.normalize_test_set(self.test)
+        dataset = normalize_dataset(dataset)
+        test = normalize_test_set(self.test)
         weight = self.compute_weights(dataset, test)
         weight = self.weights_normalization(weight)
         print(self.decision(weight))
