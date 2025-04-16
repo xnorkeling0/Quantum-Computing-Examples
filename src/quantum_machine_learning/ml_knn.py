@@ -109,18 +109,5 @@ class KnnModel:
         weight = self.weights_normalization(weight)
         print(self.decision(weight))
 
-if __name__ == "__main__":
-    # The dataset from src/dataset.csv:
-    # (It needs an empty row above the first data row)
-    # dataset = [
-    #     [4.5, 3, 1],
-    #     [1, 1.5, 2]
-    # ]
-    current_dir = Path(__file__).parent
-    db_path = current_dir / "dataset.csv"
-    test = [3.5, 2]
-    ml_model_inst = KnnModel(db_path, test)
-    ml_model_inst.run()
-
 
 
