@@ -177,97 +177,109 @@ To run the script, in CLI enter:
 python src/quantum_machine_learning/qc_ml_knn.py
 """
 
-db_path = str(Path("src") / "quantum_machine_learning" / "dataset.csv")
-dataset = normalize_dataset(get_dataset(db_path))
-test = normalize_test_set([3.5, 2])
-# Initialize the 4 quibits Q3Q2Q1Q0 state vector with amplitude encoding
-# see point 13. in the docstring. Here the vector has also been multiplied
-# by the factor 1/2 from the 4qubits Hadamard operator.
-initial_state = [ 
-    0,
-    dataset[0][0]/2,
-    0,
-    dataset[0][1]/2,
-    dataset[1][0]/2,
-    0,
-    dataset[1][1]/2,
-    0,
-    0,
-    test[0]/2,
-    0,
-    test[1]/2,
-    test[0]/2,
-    0,
-    test[1]/2,
-    0
-]
-circuit = QuantumCircuit(4,2) # 4 qubits, 2 classical
-circuit.initialize(initial_state)
-circuit.h(3) # add Hadamart gate on qubit 3; 
-circuit.measure(3,0) # Qubit Q3 measured value is stored into classical bit 0 
-circuit.measure(0,1) # Qubit Q0 measured value is stored into classical bit 1
 
-# 2. Define the observable to be measured 
+def compute_initial_state(db_path, test_set) -> list:
+    dataset = normalize_dataset(get_dataset(db_path))
+    test = normalize_test_set(test_set)
+    initial_state = [ 
+        0,
+        dataset[0][0]/2,
+        0,
+        dataset[0][1]/2,
+        dataset[1][0]/2,
+        0,
+        dataset[1][1]/2,
+        0,
+        0,
+        test[0]/2,
+        0,
+        test[1]/2,
+        test[0]/2,
+        0,
+        test[1]/2,
+        0
+    ]
+    return initial_state
 
-# 3. Optimize the problem
-backend, qc_transpiled = transpile_circuit(circuit)
+def knn_quantum_circuit(initial_state):
+    """
+    Initialize the 4 quibits Q3Q2Q1Q0 state vector with amplitude encoding
+    see point 13. in the docstring. Here the vector has also been multiplied
+    by the factor 1/2 from the 4qubits Hadamard operator.
+    """
+    circuit = QuantumCircuit(4,2) # 4 qubits, 2 classical
+    circuit.initialize(initial_state)
+    circuit.h(3) # add Hadamart gate on qubit 3; 
+    circuit.measure(3,0) # Qubit Q3 measured value is stored into classical bit 0 
+    circuit.measure(0,1) # Qubit Q0 measured value is stored into classical bit 1
+    return circuit
 
-# 3. Execute on a Quantum Computer using the Sampler primitive
-shots = 1
-sampler = Sampler(mode=backend)
-sampler.options.default_shots = shots  # Options can be set using auto-complete.
+def execute_knn_model_on_quantum_computer(backend, qc_transpiled):
+    """
+    Execute on a Quantum Computer using the Sampler primitive
+    Getting counts for separate registers
+    https://quantumcomputing.stackexchange.com/questions/40735/getting-combined-counts-when-using-qiskit-ibm-runtime-samplerv2/40736#40736
 
-"""
-Getting counts for separate registers
-https://quantumcomputing.stackexchange.com/questions/40735/getting-combined-counts-when-using-qiskit-ibm-runtime-samplerv2/40736#40736
+    counts contains the values for the two classical bit c0 and c1 in the form c1c0 --> Q0Q1
+    In the circuit c0 measure Q0 and c1 measures Q3
+    c0 --> Q3
+    c1 --> Q0
+    we need to compute probability of Q0 = 1 when Q3 is zero
+    hence we need to count statistics components to obtain  a numerator 
+    and a denominator for the probability formula
+    denominator is counted only when Q3 is zero (see explanation point 13.)
+    under this condition the numerator is counted 
+    """
+ 
+    shots = 1
+    sampler = Sampler(mode=backend)
+    sampler.options.default_shots = shots  # Options can be set using auto-complete.
+    numerator = 0
+    denominator = 0
+    shots = 50
+    job_cnt = 0
+    for i in range(shots):
+        job = sampler.run([qc_transpiled])
+        job_cnt+=1
+        print(f"Job ID: {job.job_id()} | number: {job_cnt} | status: {job.status()}")
+        result = job.result()[0]
+        counts = result.join_data().get_counts()
+        if ("00" in counts or "10" in counts):
+            denominator += 1  # Increment denominator if condition is met
+            if "10" in counts :
+                numerator += 1  # Increment numerator
 
-counts contains the values for the two classical bit c0 and c1 in the form c1c0 --> Q0Q1
-In the circuit c0 measure Q0 and c1 measures Q3
-c0 --> Q3
-c1 --> Q0
-we need to compute probability of Q0 = 1 when Q3 is zero
-hence we need to count statistics components to obtain  a numerator 
-and a denominator for the probability formula
-denominator is counted only when Q3 is zero (see explanation point 13.)
-under this condition the numerator is counted 
-"""
-numerator = 0
-denominator = 0
-shots = 50
-job_cnt = 0
-for i in range(shots):
-    job = sampler.run([qc_transpiled])
-    job_cnt+=1
-    print(f"Job ID: {job.job_id()} | number: {job_cnt} | status: {job.status()}")
-    result = job.result()[0]
-    counts = result.join_data().get_counts()
-    if ("00" in counts or "10" in counts):
-        denominator += 1  # Increment denominator if condition is met
-        if "10" in counts :
-            numerator += 1  # Increment numerator
+    # for bitstring, count in counts.items():
+    #     print(f"{bitstring}: {count}")
+    """
+     Printed result: 
+     strings and their occurencies. Basically per each string it is printed
+     how many times it was detected when running the given circuit for the
+     specified number of shots.
+         01: 602
+         00: 9465
+         10: 9716
+         11: 217
+     """
 
-# for bitstring, count in counts.items():
-#     print(f"{bitstring}: {count}")
-"""
- Printed result: 
- strings and their occurencies. Basically per each string it is printed
- how many times it was detected when running the given circuit for the
- specified number of shots.
-     01: 602
-     00: 9465
-     10: 9716
-     11: 217
- """
-
-p1 = numerator/denominator
-p2 = (denominator-numerator)/denominator
-if denominator !=0:
-    print(f"P(1) = {p1}, P(0)={p2}")
-    if p1>=p2:
-        print("Option 1 is better")
+    p1 = numerator/denominator
+    p2 = (denominator-numerator)/denominator
+    if denominator !=0:
+        print(f"P(1) = {p1}, P(0)={p2}")
+        if p1>=p2:
+            print("Option 1 is better")
+        else:
+            print("Option 2 is better")
     else:
-        print("Option 2 is better")
-else:
-    print("Division by zero detected in probability formula")
+        print("Division by zero detected in probability formula")
 
+
+if __name__ == "__main__":
+    db_path = str(Path("src") / "quantum_machine_learning" / "dataset.csv")
+    test_set = [3.5, 2]
+
+    initial_state = compute_initial_state(db_path, test_set)
+    circuit = knn_quantum_circuit(initial_state)
+    backend, qc_transpiled = transpile_circuit(circuit)
+    execute_knn_model_on_quantum_computer(backend, qc_transpiled)
 
