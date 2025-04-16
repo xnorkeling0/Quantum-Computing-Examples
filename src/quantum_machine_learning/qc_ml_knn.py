@@ -181,6 +181,10 @@ class QuantumKnnModel:
     """
     A Machine Learning model trained with IBM quantum computer
     """
+
+    def __init__(self):
+        pass
+
     def compute_initial_state(self, db_path, test_set) -> list:
         dataset = normalize_dataset(get_dataset(db_path))
         test = normalize_test_set(test_set)
