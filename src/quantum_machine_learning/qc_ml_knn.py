@@ -7,12 +7,12 @@ from pathlib import Path
 from math import sqrt
 import pandas as pd
 import numpy as np
-from qiskit import QuantumCircuit, transpile
+from qiskit import QuantumCircuit
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
-from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
+from qiskit_ibm_runtime import SamplerV2 as Sampler
 # Add the parent directory to the PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from utils.save_account import save_account, get_first_available_backend, transpile_circuit
+from utils.save_account import transpile_circuit
 from data_processing import get_dataset, normalize_dataset, normalize_test_set
 
 
