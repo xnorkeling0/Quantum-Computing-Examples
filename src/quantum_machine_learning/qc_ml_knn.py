@@ -278,7 +278,8 @@ class QuantumKnnModel:
 
 
 if __name__ == "__main__":
-    db_path = str(Path("src") / "quantum_machine_learning" / "dataset.csv")
+    current_dir = Path(__file__).parent
+    db_path = current_dir / "dataset.csv"
     
     test_set = [3.5, 2]
 
