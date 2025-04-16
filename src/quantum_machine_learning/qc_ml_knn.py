@@ -179,7 +179,7 @@ python src/quantum_machine_learning/qc_ml_knn.py
 
 class QuantumKnnModel:
     """
-    A Machine Learning model trained with quautum computer
+    A Machine Learning model trained with IBM quantum computer
     """
     def compute_initial_state(self, db_path, test_set) -> list:
         dataset = normalize_dataset(get_dataset(db_path))
