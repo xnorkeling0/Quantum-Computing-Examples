@@ -259,8 +259,14 @@ for i in range(shots):
      11: 217
  """
 
+p1 = numerator/denominator
+p2 = (denominator-numerator)/denominator
 if denominator !=0:
-    print(f"P(1) = {numerator/denominator}, P(0)={(denominator-numerator)/denominator}")
+    print(f"P(1) = {p1}, P(0)={p2}")
+    if p1>=p2:
+        print("Option 1 is better")
+    else:
+        print("Option 2 is better")
 else:
     print("Division by zero detected in probability formula")
 
