@@ -38,8 +38,7 @@ case_2  1        1.5       0 (option_2 is selected)
 test    3.5      2         ?
 """
 
-# Simplified Study Case:
-from pathlib import Path
+
 from data_processing import get_dataset, normalize_dataset, normalize_test_set
 
 
