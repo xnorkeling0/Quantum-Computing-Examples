@@ -237,8 +237,6 @@ class QuantumKnnModel:
         shots = 1
         sampler = Sampler(mode=backend)
         sampler.options.default_shots = shots  # Options can be set using auto-complete.
-        # numerator = 0
-        # denominator = 0
         shots = 50
         job_cnt = 0
         lock = threading.Lock()
@@ -278,9 +276,10 @@ class QuantumKnnModel:
              11: 217
          """
 
-        if denominator !=0:
-            p1 = numerator/denominator
-            p2 = (denominator-numerator)/denominator
+
+        if self.denominator !=0:
+            p1 = self.numerator/self.denominator
+            p2 = (self.denominator-self.numerator)/self.denominator
             return p1, p2
         else:
             print("Division by zero detected in probability formula")
