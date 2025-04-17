@@ -255,7 +255,7 @@ class QuantumKnnModel:
     
         for i in range(shots):
             job = sampler.run([qc_transpiled])
-            task.append(threading.Thread(target= _run_job(job)))
+            tasks.append(threading.Thread(target= _run_job(job)))
         
         for task in tasks:
             task.start()
