@@ -180,6 +180,7 @@ class QuantumKnnModel:
     def __init__(self):
         self.numerator = 0
         self.denominator = 0
+        self.job_cnt = 0
 
     def compute_initial_state(self, db_path, test_set) -> list:
         dataset = normalize_dataset(get_dataset(db_path))
@@ -243,11 +244,11 @@ class QuantumKnnModel:
         tasks = []
         
         def _run_job(job):
-            job_cnt+=1
-            print(f"Job ID: {job.job_id()} | number: {job_cnt} | status: {job.status()}")
             result = job.result()[0]
             counts = result.join_data().get_counts()
             with lock:
+                self.job_cnt+=1
+                print(f"Job ID: {job.job_id()} | number: {self.job_cnt} | status: {job.status()}")
                 if ("00" in counts or "10" in counts):
                     self.denominator += 1
                     if "10" in counts :
