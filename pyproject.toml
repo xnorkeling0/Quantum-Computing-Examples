@@ -14,4 +14,4 @@ branch = true
 relative_files = true
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=quantum_computing_examples --cov-report=term --cov-report-xml"
+addopts = "-v"
