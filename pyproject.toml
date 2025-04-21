@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 100
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+
+[tool.coverage.run]
+branch = true
+relative_files = true
+
+[tool.pytest.ini_options]
+addopts = "-v --cov=quantum_computing_examples --cov-report=term --cov-report-xml"
