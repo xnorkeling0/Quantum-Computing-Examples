@@ -189,9 +189,7 @@ class QuantumKnnModel:
         # Tensor product H ⊗ I ⊗ I ⊗ I
         H_tensor_I = np.kron(H, np.kron(I, np.kron(I, I)))
         return H_tensor_I
-        # Print the resulting matrix
-        print("Matrix H ⊗ I ⊗ I ⊗ I:")
-        print(H_tensor_I)
+
 
     def compute_initial_state(self, db_path, test_set) -> list:
         dataset = normalize_dataset(get_dataset(db_path))
