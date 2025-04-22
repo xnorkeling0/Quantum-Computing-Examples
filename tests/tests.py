@@ -9,7 +9,7 @@ class TestQuantumMachineLearningModel:
         H ⊗ I ⊗ I ⊗ I
         """
         qml_model = QuantumKnnModel()
-        H_tensor_I = qml_model.compute_tensor_product()
+        H_tensor_I = qml_model.compute_tensor_product(2)
         plt.imshow(H_tensor_I, cmap='viridis', interpolation='nearest')
         cbar = plt.colorbar(label="Matrix Values")  
         cbar.set_ticks([H_tensor_I.min(), H_tensor_I.max()])  # Set ticks to the extreme values
