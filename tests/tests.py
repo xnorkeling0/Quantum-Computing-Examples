@@ -1,4 +1,4 @@
-from quantum_machine_learning.qc_ml_knn import QuantumKnnModel
+from src.quantum_machine_learning.qc_ml_knn import QuantumKnnModel
 
 class TestQuantumMachineLearningModel:
 
