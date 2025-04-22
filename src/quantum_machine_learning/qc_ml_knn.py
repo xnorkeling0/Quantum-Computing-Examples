@@ -8,7 +8,7 @@ from qiskit import QuantumCircuit
 from qiskit_ibm_runtime import SamplerV2 as Sampler
 # Add the parent directory to the PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from data_processing import get_dataset, normalize_dataset, normalize_test_set
+from .data_processing import get_dataset, normalize_dataset, normalize_test_set
 
 
 """
