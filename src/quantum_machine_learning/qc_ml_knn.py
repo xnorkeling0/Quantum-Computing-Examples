@@ -180,7 +180,7 @@ class QuantumKnnModel:
     def __init__(self):
         pass
 
-    def compute_tensor_product(self):
+    def compute_tensor_product(self, identity_size: int)-> np.ndarray:
 
         # Define the Hadamard gate
         H = (1 / np.sqrt(2)) * np.array([[1, 1],
