@@ -26,4 +26,8 @@ plt.xlabel("Columns")
 plt.ylabel("Rows")
 plt.show()
 if __name__ == "__main__":
+    """
+    To run this script not as pytest but just as a python script
+    use: python -m tests.test
+    """
     pass
