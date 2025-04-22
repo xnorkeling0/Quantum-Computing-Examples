@@ -3,6 +3,7 @@
 
 import os
 import sys
+import numpy as np
 from qiskit import QuantumCircuit
 from qiskit_ibm_runtime import SamplerV2 as Sampler
 # Add the parent directory to the PYTHONPATH
@@ -178,6 +179,19 @@ class QuantumKnnModel:
 
     def __init__(self):
         pass
+
+    def compute_tensor_product(self):
+
+        # Define the Hadamard gate
+        H = (1 / np.sqrt(2)) * np.array([[1, 1],
+                                         [1, -1]])
+        I = np.eye(2)  # 2x2 identity matrix
+        # Tensor product H ⊗ I ⊗ I ⊗ I
+        H_tensor_I = np.kron(H, np.kron(I, np.kron(I, I)))
+        return H_tensor_I
+        # Print the resulting matrix
+        print("Matrix H ⊗ I ⊗ I ⊗ I:")
+        print(H_tensor_I)
 
     def compute_initial_state(self, db_path, test_set) -> list:
         dataset = normalize_dataset(get_dataset(db_path))
