@@ -181,11 +181,9 @@ class QuantumKnnModel:
         pass
 
     def compute_tensor_product(self, identity_size: int)-> np.ndarray:
-
+        I = np.eye(identity_size)
         # Define the Hadamard gate
-        H = (1 / np.sqrt(2)) * np.array([[1, 1],
-                                         [1, -1]])
-        I = np.eye(2)  # 2x2 identity matrix
+        H = (1 / np.sqrt(identity_size)) * (np.ones((identity_size, identity_size)) - 2 * np.eye(identity_size))
         # Tensor product H ⊗ I ⊗ I ⊗ I
         H_tensor_I = np.kron(H, np.kron(I, np.kron(I, I)))
         return H_tensor_I
