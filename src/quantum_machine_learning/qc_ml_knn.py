@@ -213,6 +213,21 @@ class QuantumKnnModel:
         except TypeError as e:
             raise ValueError("Datapoints not valid") from e
 
+    def generate_qubit_combinations(num_points: int) -> list:
+        """
+        Generates all possible combinations of qubits given the number of points.
+        
+        format(i, f'0{num_points}b') converts an integer i into a binary string with 
+        leading zeros to ensure a consistent length of num_points.
+    
+        :param num_points: The number of qubits (points).
+    
+        :return: A list of binary strings representing all possible combinations of qubits.
+        """
+        combinations = [format(i, f'0{num_points}b') for i in range(2**num_points)]
+        return combinations
+    
+
     def construct_state_vector(self, normalized_dataset: list) -> np.array:
         """
         Construct the initial state vector |v> dynamically from the dataset.
