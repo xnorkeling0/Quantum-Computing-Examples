@@ -34,11 +34,12 @@ class TestQuantumMachineLearningModel:
         Tests if the count_data_points method can effectively
         count the datapoint in a dataset.
         """
-        dataset = [
+        training_set = [
         [4.5, 3, 1],
         [1, 1.5, 2]
         ]
+        query_set = [[3.5,2]]
         qml_model = QuantumKnnModel()
-        number_of_datapoints = qml_model.count_data_points(dataset)
+        number_of_datapoints = qml_model.count_data_points(training_set, query_set)
 
-        assert number_of_datapoints == 2
+        assert number_of_datapoints == 3
