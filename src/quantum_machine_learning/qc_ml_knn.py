@@ -195,12 +195,13 @@ class QuantumKnnModel:
         Construct the initial state vector |v> which components are function
         of the training set points ((a,b),(c,d)) and the query point (e,f).
 
-        point ---> label:
+        data points ---> label:
         (a,b) ---> 1
         (c,d) ---> 0
         (e,f) ---> ?
     
         Amplitude encoding:
+        3 data points ---> sixe of |v> = 2^3 = 8
         combinations(Q3,Q2,Q1) --> points coordinates on the unit circle
         000 -> a
         001 -> b
