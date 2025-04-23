@@ -192,7 +192,8 @@ class QuantumKnnModel:
         """
         Construct the initial state vector |v> dynamically from the dataset.
         Set Q3 = 1 components to zero.
-        Construct the initial state vector |v>
+        Construct the initial state vector |v> which components are function
+        of the training set points ((a,b),(c,d)) and the query point (e,f).
 
         |v> components  <----> qubits string Q3 Q2 Q1 Q0  
         state_vector = [
@@ -218,11 +219,11 @@ class QuantumKnnModel:
         assert n_data % 2 == 0, "Dataset must have an even number of elements (pairs for labels)."
         # Map dataset to amplitudes
         a, b, c, d, e, f = normalized_dataset  # Automatically assign values
-        state_vector = [
+        state_vector = [ # column matrix
             0, a, 0, b,  # Q3=0, Labels 1 (a, b)
             c, 0, d, 0,  # Q3=0, Labels 0 (c, d)
-            0, 0, 0, 0,  # Q3=1 (set to 0)
-            0, 0, 0, 0   # Q3=1 (set to 0)
+            0, 0, 0, 0,  # Q3=1 (set to 0) (e, f)
+            0, 0, 0, 0   # Q3=1 (set to 0) (e, f)
         ]
         return np.array(state_vector)
 
