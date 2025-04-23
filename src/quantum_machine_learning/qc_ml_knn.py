@@ -187,6 +187,46 @@ class QuantumKnnModel:
         # Tensor product H ⊗ I ⊗ I ⊗ I
         H_tensor_I = np.kron(H, np.kron(I, np.kron(I, I)))
         return H_tensor_I
+    
+    def construct_state_vector(self, normalized_dataset: list) -> np.array:
+        """
+        Construct the initial state vector |v> dynamically from the dataset.
+        Set Q3 = 1 components to zero.
+        Construct the initial state vector |v>
+
+        |v> components  <----> qubits string Q3 Q2 Q1 Q0  
+        state_vector = [
+            0,        # 0000 Q3 = 0 states  
+            a,        # 0001 Q3 = 0 states
+            0,        # 0010 Q3 = 0 states
+            b,        # 0011 Q3 = 0 states
+            c,        # 0100 Q3 = 0 states
+            0,        # 0101 Q3 = 0 states
+            d,        # 0110 Q3 = 0 states
+            0,        # 0111 Q3 = 0 states
+            0,        # 1000 Q3 = 1 states
+            0,        # 1001 Q3 = 1 states
+            0,        # 1010 Q3 = 1 states
+            0,        # 1011 Q3 = 1 states
+            0,        # 1100 Q3 = 1 states
+            0,        # 1101 Q3 = 1 states
+            0,        # 1110 Q3 = 1 states
+            0         # 1111 Q3 = 1 states
+        ]
+        """
+        n_data = len(normalized_dataset)
+        assert n_data % 2 == 0, "Dataset must have an even number of elements (pairs for labels)."
+        half = n_data // 2
+
+        # Map dataset to amplitudes
+        a, b, c, d, e, f = dataset  # Automatically assign values
+        state_vector = [
+            0, a, 0, b,  # Q3=0, Labels 1 (a, b)
+            c, 0, d, 0,  # Q3=0, Labels 0 (c, d)
+            0, 0, 0, 0,  # Q3=1 (set to 0)
+            0, 0, 0, 0   # Q3=1 (set to 0)
+        ]
+        return np.array(state_vector)
 
 
     def compute_initial_state(self, db_path, test_set) -> list:
