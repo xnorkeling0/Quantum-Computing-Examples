@@ -26,5 +26,5 @@ class TestQuantumMachineLearningModel:
         """
         qml_model = QuantumKnnModel()
         identity_size = 2 # to match Hadamard gate size
-        H_tensor_I = qml_model.compute_tensor_product(identity_size)
+        H_tensor_I = qml_model.compute_tensor_product(2)
         assert H_tensor_I.shape == (16, 16)
