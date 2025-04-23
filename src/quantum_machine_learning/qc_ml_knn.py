@@ -195,6 +195,11 @@ class QuantumKnnModel:
         Construct the initial state vector |v> which components are function
         of the training set points ((a,b),(c,d)) and the query point (e,f).
 
+        point ---> label:
+        (a,b) ---> 1
+        (c,d) ---> 0
+        (e,f) ---> ?
+    
         |v> components  <----> qubits string Q3 Q2 Q1 Q0  
         state_vector = [
             0,        # 0000 Q3 = 0 states  
