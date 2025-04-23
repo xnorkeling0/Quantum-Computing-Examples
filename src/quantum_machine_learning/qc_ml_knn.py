@@ -188,6 +188,26 @@ class QuantumKnnModel:
         H_tensor_I = np.kron(H, np.kron(I, np.kron(I, I)))
         return H_tensor_I
     
+    def count_data_points(self, dataset: list) -> int:
+        """
+        Counts the number of datapoints of a dataset.
+        For example, the dataset below has 2 data points [4.5, 3, 1]
+        and [1, 1.5, 2]  ([coordinate 1, coordinate 2, label])
+        dataset = [
+        [4.5, 3, 1],
+        [1, 1.5, 2]
+        ]
+        """
+        try:
+            # Validate that the dataset is a list of lists
+            if not isinstance(dataset, list) or not all(isinstance(item, list) for item in dataset):
+                raise ValueError("Dataset must be a list of lists.")
+            # Return the number of datapoints
+            return len(dataset)
+        except TypeError as e:
+            raise ValueError("Datapoints not valid") from e
+
+
     def construct_state_vector(self, normalized_dataset: list) -> np.array:
         """
         Construct the initial state vector |v> dynamically from the dataset.
