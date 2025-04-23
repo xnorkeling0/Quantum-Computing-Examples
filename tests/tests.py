@@ -28,3 +28,17 @@ class TestQuantumMachineLearningModel:
         identity_size = 2 # to match Hadamard gate size
         H_tensor_I = qml_model.compute_tensor_product(identity_size)
         assert H_tensor_I.shape == (16, 16)
+    
+    def test_count_data_points(self):
+        """
+        Tests if the count_data_points method can effectively
+        count the datapoint in a dataset.
+        """
+        dataset = [
+        [4.5, 3, 1],
+        [1, 1.5, 2]
+        ]
+        qml_model = QuantumKnnModel()
+        number_of_datapoints = qml_model.count_data_points(dataset)
+
+        assert number_of_datapoints == 2
