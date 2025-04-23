@@ -43,3 +43,19 @@ class TestQuantumMachineLearningModel:
         number_of_datapoints = qml_model.count_data_points(training_set, query_set)
 
         assert number_of_datapoints == 3
+    
+    def test_generate_qubit_combinations(self):
+        num_points = 3
+        qml_model = QuantumKnnModel()
+        qubit_combinations = qml_model.generate_qubit_combinations(num_points)
+        expected_list = [
+                "000",
+                "001",
+                "010",
+                "011",
+                "100",
+                "101",
+                "110",
+                "111"
+        ]
+        assert qubit_combinations == expected_list
