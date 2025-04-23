@@ -18,3 +18,11 @@ class TestQuantumMachineLearningModel:
         plt.xlabel("Columns")
         plt.ylabel("Rows")
         plt.show()
+    
+    def test_dimensions(self):
+        """
+        Test if the matrix dimensions are correct (16x16 for 4 qubits)
+        """
+        qml_model = QuantumKnnModel()
+        H_tensor_I = qml_model.compute_tensor_product(2)
+        assert H_tensor_I.shape == (16, 16)
