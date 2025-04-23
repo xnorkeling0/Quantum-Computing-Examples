@@ -213,7 +213,7 @@ class QuantumKnnModel:
         except TypeError as e:
             raise ValueError("Datapoints not valid") from e
 
-    def generate_qubit_combinations(num_points: int) -> list:
+    def generate_qubit_combinations(self, num_points: int) -> list:
         """
         Generates all possible combinations of qubits given the number of points.
         
