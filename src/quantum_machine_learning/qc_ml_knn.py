@@ -216,10 +216,8 @@ class QuantumKnnModel:
         """
         n_data = len(normalized_dataset)
         assert n_data % 2 == 0, "Dataset must have an even number of elements (pairs for labels)."
-        half = n_data // 2
-
         # Map dataset to amplitudes
-        a, b, c, d, e, f = dataset  # Automatically assign values
+        a, b, c, d, e, f = normalized_dataset  # Automatically assign values
         state_vector = [
             0, a, 0, b,  # Q3=0, Labels 1 (a, b)
             c, 0, d, 0,  # Q3=0, Labels 0 (c, d)
