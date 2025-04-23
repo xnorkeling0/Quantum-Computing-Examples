@@ -9,7 +9,8 @@ class TestQuantumMachineLearningModel:
         H ⊗ I ⊗ I ⊗ I
         """
         qml_model = QuantumKnnModel()
-        H_tensor_I = qml_model.compute_tensor_product(2)
+        identity_size = 2 # to match Hadamard gate size
+        H_tensor_I = qml_model.compute_tensor_product(identity_size)
         plt.imshow(H_tensor_I, cmap='viridis', interpolation='nearest')
         cbar = plt.colorbar(label="Matrix Values")  
         cbar.set_ticks([H_tensor_I.min(), H_tensor_I.max()])  # Set ticks to the extreme values
@@ -24,5 +25,6 @@ class TestQuantumMachineLearningModel:
         Test if the matrix dimensions are correct (16x16 for 4 qubits)
         """
         qml_model = QuantumKnnModel()
-        H_tensor_I = qml_model.compute_tensor_product(2)
+        identity_size = 2 # to match Hadamard gate size
+        H_tensor_I = qml_model.compute_tensor_product(identity_size)
         assert H_tensor_I.shape == (16, 16)
