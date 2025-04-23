@@ -200,7 +200,19 @@ class QuantumKnnModel:
         (c,d) ---> 0
         (e,f) ---> ?
     
-        |v> components  <----> qubits string Q3 Q2 Q1 Q0  
+        Amplitude encoding:
+        combinations(Q3,Q2,Q1) --> points coordinates on the unit circle
+        000 -> a
+        001 -> b
+        010 -> c
+        011 -> d
+        100 -> e
+        101 -> f
+        110 -> e <- repeated
+        111 -> f <- repeated
+    
+        Add Q0 to store the label
+        |v> components  <----> qubits combinatinos(Q3,Q2,Q1,Q0)
         state_vector = [
             0,        # 0000 Q3 = 0 states  
             a,        # 0001 Q3 = 0 states
