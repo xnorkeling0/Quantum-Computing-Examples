@@ -208,7 +208,7 @@ class QuantumKnnModel:
 
             training_points = len(training_set)
             query_points = len(query_set)
-            data_points = training_points +query_points
+            data_points = training_points + query_points
             return data_points
         except TypeError as e:
             raise ValueError("Datapoints not valid") from e
