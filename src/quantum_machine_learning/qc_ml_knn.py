@@ -99,7 +99,9 @@ Quantum Machine Learning steps:
 
     13. Recalling point 9 Q3,Q2,Q1,Q0 -> |v>; we will collect measurements only when
     Q3 measurement is zero hence we set to zero all the components of the initialization
-    state vector where Q3 is 1 [motivation TBD]. See below we set to zero the last eight element
+    state vector where Q3 is 1. Because looking at how the tensorial product is composed,
+    Q3=1 do not referes to the training set but to the query set.
+    See below we set to zero the last eight element
     of |v>:
 
     Q3,Q2,Q1,Q0 -> |v>: state vector  values to initialize the 4 qubits
