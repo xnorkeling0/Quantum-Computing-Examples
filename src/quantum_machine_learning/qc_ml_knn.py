@@ -276,6 +276,83 @@ class QuantumKnnModel:
             0,        # 1110 Q3 = 1 states
             0         # 1111 Q3 = 1 states
         ]
+
+        Steps_1:
+        from 2D list [[a,b],[c,d]] get 1D list [a,b,c,d]
+
+        Steps_2:
+        concatenate [a,b,c,d] with query point to obtain [a,b,c,d,e,f]
+
+        Step_3:
+        with a dictionary associate each element of the list to one of the (Q3,Q2,Q1) combination
+        list elements
+        progressibvely (e.g., "000" -> a, "001"->b, etc.)
+            000 -> a
+            001 -> b
+            010 -> c
+            011 -> d
+            100 -> e
+            101 -> f
+            110 -> e <- repeated
+            111 -> f <- repeated
+        
+        Step_4:
+        Get the list of combinations of (Q3,Q2,Q1,Q0)
+
+        Step_5:
+        remove from the previous list those elements for which Q3=1
+
+        Step_6:
+        based on Step_3 build a dictionary associating each of the remaining combinatorial elements
+        to the corresponding training point coordinate keep following the incremental order
+        of Step_3.
+            Q3,Q2,Q1,Q0 -> |v>: state vector  values to initialize the 4 qubits
+            0000 -> 0
+            0001 -> a <- "a" is stored where Q0=1 (label 1)
+            0010 -> 0
+            0011 -> b
+            0100 -> c <- "c" is stored where Q0=0 (label 0)
+            0101 -> 0
+            0110 -> d
+            0111 -> 0
+            1000 -> 0|<- 1000 and 1001 are for e (when query (e,f) is labelled 1)
+            1001 -> 0|
+            1010 -> 0|<-1010 and 1011 are for f (when query (e,f) is labelled 1)
+            1011 -> 0|
+            1100 -> 0| <- repeated (when query (e,f) is labelled 0)
+            1101 -> 0| 
+            1110 -> 0| <- repeated (when query (e,f) is labelled 0)
+            1111 -> 0|
+
+        Step_7:
+        from Step_6 obtain a vector of the dictionary values which is this one:
+        |v> = [
+                0,
+                a,
+                0,
+                b,
+                c,
+                0,
+                d,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+             
+        Step_8:
+        compute the tensorial product T|v>
+
+        
+
+
+
+
         """
         n_data = len(normalized_dataset)
         assert n_data % 2 == 0, "Dataset must have an even number of elements (pairs for labels)."
