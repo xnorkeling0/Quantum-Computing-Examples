@@ -84,14 +84,16 @@ Quantum Machine Learning steps:
     them by 2 to fit them into the state vector.
 
     The constant value 2 ensures that the sum of the squares of all those values
-    adds up to 1 (because they are the result of applying an Hadamart gate to 4 qubits
-    which originates a 16x16 matrix multiplied by a 1/2 constant)
+    adds up to 1.
 
     11. To the state vector obtained at point 10. it is applied the following Hadamard
     transformation T:
-    T = H (x) I (x) I (x) I = (1/sqrt(2))[16 rows x 16 columns]
-    where H Hdamard matrix; I identity matrix; (x):tensorial product;
-    T has 16 rows x 16 columns
+    T = H (x) I (x) I (x) I = (1/sqrt(2)[16 rows x 16 columns]
+    where: 
+        H: Hsdamard matrix;
+        I: identity matrix;
+        (x): tensorial product;
+    T has 16 rows x 16 columns.
 
     12. Applying the transformation T to |v>: T|v> we obtain the following column matrix (vector):
     [0, a+e, 0, b+f, c+e, 0, d+f, 0, 0, a-e, 0, b-f, c-e, 0, d-f].
