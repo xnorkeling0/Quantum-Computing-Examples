@@ -241,7 +241,7 @@ class QuantumKnnModel:
         (e,f) ---> ?
     
         Amplitude encoding:
-        3 data points ---> sixe of |v> = 2^3 = 8
+        3 data points ---> size of |v> = 2^3 = 8
         combinations(Q3,Q2,Q1) --> points coordinates on the unit circle
         000 -> a
         001 -> b
