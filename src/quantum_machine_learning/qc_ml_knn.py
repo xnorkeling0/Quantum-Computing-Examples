@@ -3,6 +3,7 @@
 
 import os
 import sys
+import threading
 from qiskit import QuantumCircuit
 from qiskit_ibm_runtime import SamplerV2 as Sampler
 # Add the parent directory to the PYTHONPATH
@@ -177,7 +178,9 @@ class QuantumKnnModel:
     """
 
     def __init__(self):
-        pass
+        self.numerator = 0
+        self.denominator = 0
+        self.job_cnt = 0
 
     def compute_initial_state(self, db_path, test_set) -> list:
         dataset = normalize_dataset(get_dataset(db_path))
@@ -235,20 +238,31 @@ class QuantumKnnModel:
         shots = 1
         sampler = Sampler(mode=backend)
         sampler.options.default_shots = shots  # Options can be set using auto-complete.
-        numerator = 0
-        denominator = 0
         shots = 50
         job_cnt = 0
-        for i in range(shots):
-            job = sampler.run([qc_transpiled])
-            job_cnt+=1
-            print(f"Job ID: {job.job_id()} | number: {job_cnt} | status: {job.status()}")
+        lock = threading.Lock()
+        tasks = []
+        
+        def _run_job(job):
             result = job.result()[0]
             counts = result.join_data().get_counts()
-            if ("00" in counts or "10" in counts):
-                denominator += 1  # Increment denominator if condition is met
-                if "10" in counts :
-                    numerator += 1  # Increment numerator
+            with lock:
+                self.job_cnt+=1
+                print(f"Job ID: {job.job_id()} | number: {self.job_cnt} | status: {job.status()}")
+                if ("00" in counts or "10" in counts):
+                    self.denominator += 1
+                    if "10" in counts :
+                        self.numerator += 1
+    
+        for i in range(shots):
+            job = sampler.run([qc_transpiled])
+            tasks.append(threading.Thread(target= _run_job(job)))
+        
+        for task in tasks:
+            task.start()
+        
+        for task in tasks:
+            task.join()
 
         # for bitstring, count in counts.items():
         #     print(f"{bitstring}: {count}")
@@ -263,9 +277,10 @@ class QuantumKnnModel:
              11: 217
          """
 
-        if denominator !=0:
-            p1 = numerator/denominator
-            p2 = (denominator-numerator)/denominator
+
+        if self.denominator !=0:
+            p1 = self.numerator/self.denominator
+            p2 = (self.denominator-self.numerator)/self.denominator
             return p1, p2
         else:
             print("Division by zero detected in probability formula")
