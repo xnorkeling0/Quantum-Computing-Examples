@@ -434,9 +434,9 @@ class QuantumKnnModel:
             result = job.result()[0]
             counts = result.join_data().get_counts()
             if ("00" in counts or "10" in counts):
-                denominator += 1  # Increment denominator if condition is met
+                denominator += 1
                 if "10" in counts :
-                    numerator += 1  # Increment numerator
+                    numerator += 1
 
         # for bitstring, count in counts.items():
         #     print(f"{bitstring}: {count}")
