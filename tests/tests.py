@@ -84,3 +84,4 @@ def test_execute_knn_model_on_quantum_computer(mock_sampler_class):
 
     # Verify that the mock's run method was called
     mock_sampler.run.assert_called_with([qc_transpiled])
+    assert mock_sampler.run.call_count == 50, f"Expected 50 calls, got {mock_sampler.run.call_count}"
