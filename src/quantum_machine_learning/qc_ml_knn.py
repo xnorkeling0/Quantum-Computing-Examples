@@ -430,8 +430,8 @@ class QuantumKnnModel:
         for i in range(shots):
             job = sampler.run([qc_transpiled])
             job_cnt+=1
-            print(f"Job ID: {job.job_id()} | number: {job_cnt} | status: {job.status()}")
             result = job.result()[0]
+            print(f"Job ID: {job.job_id()} | number: {job_cnt} | status: {job.status()}")
             counts = result.join_data().get_counts()
             if ("00" in counts or "10" in counts):
                 denominator += 1
