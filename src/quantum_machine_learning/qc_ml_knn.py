@@ -422,7 +422,7 @@ class QuantumKnnModel:
     
         shots = 1
         sampler = Sampler(mode=backend)
-        sampler.options.default_shots = shots  # Options can be set using auto-complete.
+        sampler.options.default_shots = shots
         numerator = 0
         denominator = 0
         shots = 50
