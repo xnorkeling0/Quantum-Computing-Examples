@@ -4,21 +4,6 @@ from src.quantum_machine_learning.qc_ml_knn import QuantumKnnModel
 from unittest.mock import MagicMock, patch
 
 
-@pytest.fixture
-def mock_sampler():
-    """Mock sampler to simulate quantum execution."""
-    mock_sampler = MagicMock()
-    mock_job = MagicMock()
-    
-    # Simulating job.result() returning a list with mocked result data
-    mock_job.result.return_value = [
-        MagicMock(join_data=MagicMock(return_value=MagicMock(get_counts=lambda: {"10": 30, "00": 20})))
-    ]
-    
-    mock_sampler.run.return_value = mock_job
-    return mock_sampler
-
-
 class TestQuantumMachineLearningModel:
 
     def test_plot_tensor_product(self):
@@ -78,16 +63,24 @@ class TestQuantumMachineLearningModel:
         ]
         assert qubit_combinations == expected_list
     
-    @patch("src.quantum_machine_learning.qc_ml_knn.Sampler")  # Mock Sampler in the module
-    def test_execute_knn_model_on_quantum_computer(mock_sampler_class, mock_sampler):
-        """Test quantum KNN model execution."""
-        mock_sampler_class.return_value = mock_sampler  # Replace Sampler instance with our mock
+@patch("src.quantum_machine_learning.qc_ml_knn.Sampler")  
+def test_execute_knn_model_on_quantum_computer(mock_sampler_class):
+    """Test quantum KNN model execution."""
+    mock_sampler = MagicMock()  # Create the mock instance
+    mock_sampler_class.return_value = mock_sampler  # Replace Sampler with our mock
 
-        backend = "mock_backend"
-        qc_transpiled = "mock_circuit"
+    mock_job = MagicMock()
+    mock_job.result.return_value = [
+        MagicMock(join_data=MagicMock(return_value=MagicMock(get_counts=lambda: {"10": 30, "00": 20})))
+    ]
 
-        model = QuantumKnnModel()  # Instantiate the model
-        model.execute_knn_model_on_quantum_computer(backend, qc_transpiled)
+    mock_sampler.run.return_value = mock_job  # Ensure run() returns the mock job
 
-        # Verify that the mocked sampler was used correctly
-        mock_sampler.run.assert_called_with([qc_transpiled])
+    backend = "mock_backend"
+    qc_transpiled = "mock_circuit"
+
+    model = QuantumKnnModel()  # Instantiate the model
+    model.execute_knn_model_on_quantum_computer(backend, qc_transpiled)
+
+    # Verify that the mock's run method was called
+    mock_sampler.run.assert_called_with([qc_transpiled])
