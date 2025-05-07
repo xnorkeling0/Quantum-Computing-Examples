@@ -84,7 +84,7 @@ def test_execute_knn_model_on_quantum_computer(mock_sampler_class):
     backend = "mock_backend"
     qc_transpiled = "mock_circuit"
 
-    model = QuantumKnnModel()  # Instantiate the model
+    model = QuantumKnnModel()
     p1, p2, numerator, denominator = model.execute_knn_model_on_quantum_computer(backend, qc_transpiled)
 
     # Verify that the mock's run method was called
