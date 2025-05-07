@@ -80,8 +80,11 @@ def test_execute_knn_model_on_quantum_computer(mock_sampler_class):
     qc_transpiled = "mock_circuit"
 
     model = QuantumKnnModel()  # Instantiate the model
-    model.execute_knn_model_on_quantum_computer(backend, qc_transpiled)
+    p1, p2, numerator, denominator = model.execute_knn_model_on_quantum_computer(backend, qc_transpiled)
 
     # Verify that the mock's run method was called
     mock_sampler.run.assert_called_with([qc_transpiled])
     assert mock_sampler.run.call_count == 50, f"Expected 50 calls, got {mock_sampler.run.call_count}"
+    # Verify numerator and denominator values
+    assert numerator == 30, f"Expected numerator to be 30, got {numerator}"
+    assert denominator == 50, f"Expected denominator to be 50, got {denominator}"
