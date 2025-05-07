@@ -5,7 +5,7 @@ import os
 import sys
 import numpy as np
 from qiskit import QuantumCircuit
-from qiskit_ibm_runtime import SamplerV2 as Sampler
+from qiskit_ibm_runtime import SamplerV2 as Sampler, ibm_backend
 # Add the parent directory to the PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from src.quantum_machine_learning.data_processing import get_dataset, normalize_dataset, normalize_test_set
@@ -403,7 +403,7 @@ class QuantumKnnModel:
         circuit.measure(0,1) # Qubit Q0 measured value is stored into classical bit 1
         return circuit
 
-    def execute_knn_model_on_quantum_computer(self, backend, qc_transpiled, shots: int = 50):
+    def execute_knn_model_on_quantum_computer(self, backend: ibm_backend.IBMBackend, qc_transpiled: QuantumCircuit, shots: int = 50):
         """
         Execute on a Quantum Computer using the Sampler primitive
         Getting counts for separate registers
