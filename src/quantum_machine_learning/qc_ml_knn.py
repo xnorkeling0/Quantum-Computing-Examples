@@ -409,8 +409,8 @@ class QuantumKnnModel:
         Getting counts for separate registers
         https://quantumcomputing.stackexchange.com/questions/40735/getting-combined-counts-when-using-qiskit-ibm-runtime-samplerv2/40736#40736
 
-        counts contains the values for the two classical bit c0 and c1 in the form c1c0 --> Q0Q1
-        In the circuit c0 measure Q0 and c1 measures Q3
+        counts contains the values for the two classical bit c0 and c1 in the form c1c0 --> Q0Q3
+        In the circuit c0 measure Q3 and c1 measures Q0
         c0 --> Q3
         c1 --> Q0
         we need to compute probability of Q0 = 1 when Q3 is zero
@@ -454,7 +454,7 @@ class QuantumKnnModel:
         if denominator !=0:
             p1 = numerator/denominator
             p2 = (denominator-numerator)/denominator
-            return p1, p2
+            return p1, p2, numerator, denominator
         else:
             print("Division by zero detected in probability formula")
 
