@@ -426,7 +426,6 @@ class QuantumKnnModel:
         numerator = 0
         denominator = 0
         shots = 50
-        job_cnt = 0
         for shot in range(shots):
             job = sampler.run([qc_transpiled])
             result = job.result()[0]
