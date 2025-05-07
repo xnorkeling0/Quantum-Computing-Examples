@@ -68,11 +68,16 @@ def test_execute_knn_model_on_quantum_computer(mock_sampler_class):
     """Test quantum KNN model execution."""
     mock_sampler = MagicMock()  # Create the mock instance
     mock_sampler_class.return_value = mock_sampler  # Replace Sampler with our mock
-
     mock_job = MagicMock()
-    mock_job.result.return_value = [
-        MagicMock(join_data=MagicMock(return_value=MagicMock(get_counts=lambda: {"10": 30, "00": 20})))
-    ]
+    
+    # Generate counts dynamically for each call
+    def mock_get_counts():
+        """Simulate different results per iteration."""
+        return {"10": 1} if mock_sampler.run.call_count <= 30 else {"00": 1}
+    
+    mock_result = MagicMock()
+    mock_result.join_data.return_value.get_counts.side_effect = mock_get_counts
+    mock_job.result.return_value = [mock_result]
 
     mock_sampler.run.return_value = mock_job  # Ensure run() returns the mock job
 
