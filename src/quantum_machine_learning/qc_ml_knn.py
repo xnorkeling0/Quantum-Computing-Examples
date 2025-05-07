@@ -1,14 +1,18 @@
 """Quantum Computing Machine Learning Example"""
 
-
 import os
 import sys
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit_ibm_runtime import SamplerV2 as Sampler, ibm_backend
+
 # Add the parent directory to the PYTHONPATH
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from src.quantum_machine_learning.data_processing import get_dataset, normalize_dataset, normalize_test_set
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+from src.quantum_machine_learning.data_processing import (
+    get_dataset,
+    normalize_dataset,
+    normalize_test_set,
+)
 
 
 """
@@ -176,6 +180,7 @@ To run the script, in CLI enter:
 python src/quantum_machine_learning/qc_ml_knn.py
 """
 
+
 class QuantumKnnModel:
     """
     A Machine Learning model trained with IBM quantum computer
@@ -184,14 +189,16 @@ class QuantumKnnModel:
     def __init__(self):
         pass
 
-    def compute_tensor_product(self, identity_size: int)-> np.ndarray:
+    def compute_tensor_product(self, identity_size: int) -> np.ndarray:
         I = np.eye(identity_size)
         # Define the Hadamard gate
-        H = (1 / np.sqrt(identity_size)) * (np.ones((identity_size, identity_size)) - 2 * np.eye(identity_size))
+        H = (1 / np.sqrt(identity_size)) * (
+            np.ones((identity_size, identity_size)) - 2 * np.eye(identity_size)
+        )
         # Tensor product H ⊗ I ⊗ I ⊗ I
         H_tensor_I = np.kron(H, np.kron(I, np.kron(I, I)))
         return H_tensor_I
-    
+
     def count_data_points(self, training_set: list, query_set: list) -> int:
         """
         Counts the number of datapoints of a dataset.
@@ -220,17 +227,16 @@ class QuantumKnnModel:
     def generate_qubit_combinations(self, num_points: int) -> list:
         """
         Generates all possible combinations of qubits given the number of points.
-        
-        format(i, f'0{num_points}b') converts an integer i into a binary string with 
+
+        format(i, f'0{num_points}b') converts an integer i into a binary string with
         leading zeros to ensure a consistent length of num_points.
-    
+
         :param num_points: The number of qubits (points).
-    
+
         :return: A list of binary strings representing all possible combinations of qubits.
         """
-        combinations = [format(i, f'0{num_points}b') for i in range(2**num_points)]
+        combinations = [format(i, f"0{num_points}b") for i in range(2**num_points)]
         return combinations
-    
 
     def construct_state_vector(self, normalized_dataset: list) -> np.array:
         """
@@ -243,7 +249,7 @@ class QuantumKnnModel:
         (a,b) ---> 1
         (c,d) ---> 0
         (e,f) ---> ?
-    
+
         Amplitude encoding:
         3 data points ---> size of |v> = 2^3 = 8
         combinations(Q3,Q2,Q1) --> points coordinates on the unit circle
@@ -255,11 +261,11 @@ class QuantumKnnModel:
         101 -> f
         110 -> e <- repeated
         111 -> f <- repeated
-    
+
         Add Q0 to store the label
         |v> components  <----> qubits combinatinos(Q3,Q2,Q1,Q0)
         state_vector = [
-            0,        # 0000 Q3 = 0 states  
+            0,        # 0000 Q3 = 0 states
             a,        # 0001 Q3 = 0 states
             0,        # 0010 Q3 = 0 states
             b,        # 0011 Q3 = 0 states
@@ -295,7 +301,7 @@ class QuantumKnnModel:
             101 -> f
             110 -> e <- repeated
             111 -> f <- repeated
-        
+
         Step_4:
         Get the list of combinations of (Q3,Q2,Q1,Q0)
 
@@ -320,7 +326,7 @@ class QuantumKnnModel:
             1010 -> 0|<-1010 and 1011 are for f (when query (e,f) is labelled 1)
             1011 -> 0|
             1100 -> 0| <- repeated (when query (e,f) is labelled 0)
-            1101 -> 0| 
+            1101 -> 0|
             1110 -> 0| <- repeated (when query (e,f) is labelled 0)
             1111 -> 0|
 
@@ -344,11 +350,11 @@ class QuantumKnnModel:
                 0,
                 0
             ]
-             
+
         Step_8:
         compute the tensorial product T|v>
 
-        
+
 
 
 
@@ -358,35 +364,46 @@ class QuantumKnnModel:
         assert n_data % 2 == 0, "Dataset must have an even number of elements (pairs for labels)."
         # Map dataset to amplitudes
         a, b, c, d, e, f = normalized_dataset  # Automatically assign values
-        state_vector = [ # column matrix
-            0, a, 0, b,  # Q3=0, Labels 1 (a, b)
-            c, 0, d, 0,  # Q3=0, Labels 0 (c, d)
-            0, 0, 0, 0,  # Q3=1 (set to 0) (e, f)
-            0, 0, 0, 0   # Q3=1 (set to 0) (e, f)
+        state_vector = [  # column matrix
+            0,
+            a,
+            0,
+            b,  # Q3=0, Labels 1 (a, b)
+            c,
+            0,
+            d,
+            0,  # Q3=0, Labels 0 (c, d)
+            0,
+            0,
+            0,
+            0,  # Q3=1 (set to 0) (e, f)
+            0,
+            0,
+            0,
+            0,  # Q3=1 (set to 0) (e, f)
         ]
         return np.array(state_vector)
-
 
     def compute_initial_state(self, db_path, test_set) -> list:
         dataset = normalize_dataset(get_dataset(db_path))
         test = normalize_test_set(test_set)
-        initial_state = [ 
+        initial_state = [
             0,
-            dataset[0][0]/2,
+            dataset[0][0] / 2,
             0,
-            dataset[0][1]/2,
-            dataset[1][0]/2,
+            dataset[0][1] / 2,
+            dataset[1][0] / 2,
             0,
-            dataset[1][1]/2,
+            dataset[1][1] / 2,
             0,
             0,
-            test[0]/2,
+            test[0] / 2,
             0,
-            test[1]/2,
-            test[0]/2,
+            test[1] / 2,
+            test[0] / 2,
             0,
-            test[1]/2,
-            0
+            test[1] / 2,
+            0,
         ]
         return initial_state
 
@@ -396,14 +413,16 @@ class QuantumKnnModel:
         see point 13. in the docstring. Here the vector has also been multiplied
         by the factor 1/2 from the 4qubits Hadamard operator.
         """
-        circuit = QuantumCircuit(4,2) # 4 qubits, 2 classical
+        circuit = QuantumCircuit(4, 2)  # 4 qubits, 2 classical
         circuit.initialize(initial_state)
-        circuit.h(3) # add Hadamart gate on qubit 3; 
-        circuit.measure(3,0) # Qubit Q3 measured value is stored into classical bit 0 
-        circuit.measure(0,1) # Qubit Q0 measured value is stored into classical bit 1
+        circuit.h(3)  # add Hadamart gate on qubit 3;
+        circuit.measure(3, 0)  # Qubit Q3 measured value is stored into classical bit 0
+        circuit.measure(0, 1)  # Qubit Q0 measured value is stored into classical bit 1
         return circuit
 
-    def execute_knn_model_on_quantum_computer(self, backend: ibm_backend.IBMBackend, qc_transpiled: QuantumCircuit, shots: int = 50):
+    def execute_knn_model_on_quantum_computer(
+        self, backend: ibm_backend.IBMBackend, qc_transpiled: QuantumCircuit, shots: int = 50
+    ):
         """
         Execute on a Quantum Computer using the Sampler primitive
         Getting counts for separate registers
@@ -414,12 +433,12 @@ class QuantumKnnModel:
         c0 --> Q3
         c1 --> Q0
         we need to compute probability of Q0 = 1 when Q3 is zero
-        hence we need to count statistics components to obtain  a numerator 
+        hence we need to count statistics components to obtain  a numerator
         and a denominator for the probability formula
         denominator is counted only when Q3 is zero (see explanation point 13.)
-        under this condition the numerator is counted 
+        under this condition the numerator is counted
         """
-    
+
         sampler = Sampler(mode=backend)
         sampler.options.default_shots = 1
         numerator = 0
@@ -429,9 +448,9 @@ class QuantumKnnModel:
             result = job.result()[0]
             print(f"Job ID: {job.job_id()} | number: {shot} | status: {job.status()}")
             counts = result.join_data().get_counts()
-            if ("00" in counts or "10" in counts):
+            if "00" in counts or "10" in counts:
                 denominator += 1
-                if "10" in counts :
+                if "10" in counts:
                     numerator += 1
 
         # for bitstring, count in counts.items():
@@ -447,10 +466,9 @@ class QuantumKnnModel:
              11: 217
          """
 
-        if denominator !=0:
-            p1 = numerator/denominator
-            p2 = (denominator-numerator)/denominator
+        if denominator != 0:
+            p1 = numerator / denominator
+            p2 = (denominator - numerator) / denominator
             return p1, p2, numerator, denominator
         else:
             print("Division by zero detected in probability formula")
-

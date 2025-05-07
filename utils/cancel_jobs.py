@@ -15,4 +15,3 @@ if cancelled_jobs:
     print("Cancelled jobs IDs:")
     for job in cancelled_jobs:
         print(f"{job.job_id()}")
-

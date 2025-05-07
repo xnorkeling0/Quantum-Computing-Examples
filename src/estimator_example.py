@@ -6,7 +6,7 @@ from qiskit.quantum_info import SparsePauliOp
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from qiskit_ibm_runtime import QiskitRuntimeService, EstimatorV2 as Estimator
 
-token  = os.getenv('IBM_QUANTUM_TOKEN') 
+token = os.getenv("IBM_QUANTUM_TOKEN")
 service = QiskitRuntimeService(channel="ibm_quantum", token=token)
 backend = service.least_busy(operational=True, simulator=False)
 
