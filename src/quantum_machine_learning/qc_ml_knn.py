@@ -420,9 +420,8 @@ class QuantumKnnModel:
         under this condition the numerator is counted 
         """
     
-        shots = 1
         sampler = Sampler(mode=backend)
-        sampler.options.default_shots = shots
+        sampler.options.default_shots = 1
         numerator = 0
         denominator = 0
         shots = 50
