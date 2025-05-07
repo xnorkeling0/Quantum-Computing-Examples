@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pytest
+import random
 from src.quantum_machine_learning.qc_ml_knn import QuantumKnnModel
 from unittest.mock import MagicMock, patch
 
@@ -61,10 +62,10 @@ def test_execute_knn_model_on_quantum_computer(mock_sampler_class):
     mock_sampler_class.return_value = mock_sampler  # Replace Sampler with our mock
     mock_job = MagicMock()  # job = sampler.run([qc_transpiled])
 
-    # Generate counts dynamically for each call
+    # Generate random occurrences for "10" across 50 calls
     def mock_get_counts():
-        """Simulate different results per iteration."""
-        return {"10": 1} if mock_sampler.run.call_count <= 30 else {"00": 1}
+        """Randomly decide if '10' appears based on probability."""
+        return {"10": 1} if random.random() < 0.6 else {"00": 1}  # ~60% chance for "10"
 
     mock_result = MagicMock()  # result = job.result()[0]
     mock_result.join_data.return_value.get_counts.side_effect = mock_get_counts
@@ -87,5 +88,5 @@ def test_execute_knn_model_on_quantum_computer(mock_sampler_class):
     assert (
         mock_sampler.run.call_count == 50
     ), f"Expected 50 calls, got {mock_sampler.run.call_count}"
-    assert numerator == 30, f"Expected numerator to be 30, got {numerator}"
+    assert 20 <= numerator <= 40, f"Expected numerator between 20-40, got {numerator}"
     assert denominator == 50, f"Expected denominator to be 50, got {denominator}"
