@@ -403,7 +403,7 @@ class QuantumKnnModel:
         circuit.measure(0,1) # Qubit Q0 measured value is stored into classical bit 1
         return circuit
 
-    def execute_knn_model_on_quantum_computer(self, backend, qc_transpiled):
+    def execute_knn_model_on_quantum_computer(self, backend, qc_transpiled, shots: int = 50):
         """
         Execute on a Quantum Computer using the Sampler primitive
         Getting counts for separate registers
@@ -424,7 +424,6 @@ class QuantumKnnModel:
         sampler.options.default_shots = 1
         numerator = 0
         denominator = 0
-        shots = 50
         for shot in range(shots):
             job = sampler.run([qc_transpiled])
             result = job.result()[0]
