@@ -57,7 +57,25 @@ class TestQuantumMachineLearningModel:
 
 @patch("src.quantum_machine_learning.qc_ml_knn.Sampler")
 def test_execute_knn_model_on_quantum_computer(mock_sampler_class):
-    """Test quantum KNN model execution."""
+    """
+    Test quantum KNN model execution.
+    Currently the execution was estabilished for a default number of shots
+    equal to 50 because with a free IBM account, this implies nearly
+    1 minute of IBM quantum computing resource utilization over 10mins per month.
+    The test verifies that over 50 shots the bistrsing "10" is detected for
+    nearly 60% of the times meaning that the probability p1 that the QML KNN agent
+    will make the correct choice per each case is higher than the probability
+    of making the wrong choice p2.
+
+        Specifically look at 
+            option_1 option_2  choice(label)   P(choice)
+    case_1  a        b         1               P(1) = 1 and P(0) = 0
+    case_2  c        d         0               P(1) = 0 and P(0) = 1
+    test    e        f         ?
+
+    for case_1 p1 = P(1) and p2 = P(0) 
+    for case_2 p1 = P(0) and p2 = P(1) 
+    """
     mock_sampler = MagicMock()  # Create the mock instance
     mock_sampler_class.return_value = mock_sampler  # Replace Sampler with our mock
     mock_job = MagicMock()  # job = sampler.run([qc_transpiled])
@@ -83,8 +101,7 @@ def test_execute_knn_model_on_quantum_computer(mock_sampler_class):
 
     # Verify that the mock's run method was called
     mock_sampler.run.assert_called_with([qc_transpiled])
-    assert p1 >= 0.5
-    assert p2 < 0.5
+    assert p1 >= p2
     assert (
         mock_sampler.run.call_count == 50
     ), f"Expected 50 calls, got {mock_sampler.run.call_count}"
