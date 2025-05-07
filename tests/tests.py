@@ -92,6 +92,5 @@ def test_execute_knn_model_on_quantum_computer(mock_sampler_class):
     assert p1 >= 0.5
     assert p2 < 0.5
     assert mock_sampler.run.call_count == 50, f"Expected 50 calls, got {mock_sampler.run.call_count}"
-    # Verify numerator and denominator values
     assert numerator == 30, f"Expected numerator to be 30, got {numerator}"
     assert denominator == 50, f"Expected denominator to be 50, got {denominator}"
