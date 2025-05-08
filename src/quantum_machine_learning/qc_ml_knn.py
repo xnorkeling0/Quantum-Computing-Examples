@@ -354,6 +354,8 @@ class QuantumKnnModel:
         Step_8:
         compute the tensorial product T|v>
 
+        # TODO: additinoal steps
+
 
 
 
