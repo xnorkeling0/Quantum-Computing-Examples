@@ -1,8 +1,9 @@
-import sys 
+import sys
 import os
-# Add the parent directory to the PYTHONPATH 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from utils.save_account import save_account, get_first_available_backend,transpile_circuit
+
+# Add the parent directory to the PYTHONPATH
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from utils.save_account import save_account, get_first_available_backend, transpile_circuit
 import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.primitives import StatevectorSampler, StatevectorEstimator
@@ -16,17 +17,16 @@ def main():
     """
     Example from https://github.com/Qiskit/qiskit
     """
-    
 
     # 1. Map the problem: A quantum circuit for preparing the quantum state |000> + i |111>
     num_qubits = 3
     qc_example = QuantumCircuit(num_qubits)
-    qc_example.h(0)          # generate superpostion
-    qc_example.p(np.pi/2,0)  # add quantum phase
-    qc_example.cx(0,1)       # 0th-qubit-Controlled-NOT gate on 1st qubit
-    qc_example.cx(0,2)       # 0th-qubit-Controlled-NOT gate on 2nd qubit
+    qc_example.h(0)  # generate superpostion
+    qc_example.p(np.pi / 2, 0)  # add quantum phase
+    qc_example.cx(0, 1)  # 0th-qubit-Controlled-NOT gate on 1st qubit
+    qc_example.cx(0, 2)  # 0th-qubit-Controlled-NOT gate on 2nd qubit
 
-    # 2. Define the observable to be measured 
+    # 2. Define the observable to be measured
     operator = SparsePauliOp.from_list([("XXY", 1), ("XYX", 1), ("YXX", 1), ("YYY", -1)])
     print(f"The operators strings:\n{operator}")
 
@@ -36,7 +36,7 @@ def main():
 
     # 4. Execute on the Backend
     estimator = Estimator(mode=backend)
-    job  = estimator.run([(qc_transpiled, operator_transpiled)])
+    job = estimator.run([(qc_transpiled, operator_transpiled)])
     job_id = job.job_id()
     job_status = job.status()
     print(job_id)
@@ -44,7 +44,8 @@ def main():
     pub_result = job.result()[0]
     print(f"Expectation values: {pub_result.data.evs}")
 
-
     # TODO: run on quantum computer following https://github.com/Qiskit/qiskit-ibm-runtime
+
+
 if __name__ == "__main__":
     main()
